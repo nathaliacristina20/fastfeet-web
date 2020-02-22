@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Wrapper } from './styles';
-import { Menu } from '../../../components/Menu';
+import { Wrapper, Content } from './styles';
+
+import Menu from '../../../components/Menu';
 
 export default function DefaultLayout({ children }) {
-    return (<Wrapper> <Menu /> {children}</Wrapper>);
+    return (
+        <Wrapper>
+        <Menu />
+        <Content>{children}</Content>
+    </Wrapper>
+    );
 }
 
 DefaultLayout.propTypes = {

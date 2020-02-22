@@ -9,7 +9,7 @@ import InputComponent from '../../components/Form/Input';
 
 import { signInRequest } from '~/store/modules/auth/actions';
 
-import validateInputForm from '../../components/Form/Util/ErrorHandler';
+import validateInputForm from '../../components/Util/ErrorHandler';
 
 export default function SignIn() {
     const formRef = useRef(null);

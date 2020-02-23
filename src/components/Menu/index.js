@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Container, Content, Logo, Navigation, Logout } from './styles';
@@ -6,7 +7,6 @@ import { Container, Content, Logo, Navigation, Logout } from './styles';
 import logo from '../../assets/fastfeet.svg';
 
 export default function Menu() {
-
     const [breadcrumbs, setBreadcrumbs] = useState([
         { route: '/encomendas', label: 'Encomendas', active: true },
         { route: '/entregadores', label: 'Entregadores', active: false },
@@ -14,17 +14,17 @@ export default function Menu() {
         { route: '/problemas', label: 'Problemas', active: false },
     ]);
 
-    function handleSignOut(){
+    const profile = useSelector(state => state.user.profile);
 
-    }
+    function handleSignOut() {}
 
     return (
-   <Container>
-       <Content>
-        <Logo>
-           <img src={logo} alt="Logo" />
-        </Logo>       
-       <Navigation active>
+        <Container>
+            <Content>
+                <Logo>
+                    <img src={logo} alt="Logo" />
+                </Logo>
+                <Navigation active>
                     <nav>
                         {breadcrumbs.map(breadcrumb => (
                             <Link
@@ -37,13 +37,13 @@ export default function Menu() {
                         ))}
                     </nav>
                 </Navigation>
-        </Content>
-        <Logout>
-            <h3>profile name</h3>
-            <button type="button" onClick={handleSignOut}>
-                <span>sair do sistema</span>
-            </button>
-        </Logout>     
-   </Container>
+            </Content>
+            <Logout>
+                <h3>{profile.name}</h3>
+                <button type="button" onClick={handleSignOut}>
+                    <span>sair do sistema</span>
+                </button>
+            </Logout>
+        </Container>
     );
 }

@@ -7,9 +7,9 @@ import Menu from '../../../components/Menu';
 export default function DefaultLayout({ children }) {
     return (
         <Wrapper>
-        <Menu />
-        <Content>{children}</Content>
-    </Wrapper>
+            <Menu />
+            <Content>{children}</Content>
+        </Wrapper>
     );
 }
 

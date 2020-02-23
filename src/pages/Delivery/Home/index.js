@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Container, Title } from './styles';
 
-export default function Delivery({ title }) {
+export default function Deliveries({ title }) {
     return (
         <Container>
             <Title>{title}</Title>

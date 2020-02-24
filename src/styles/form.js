@@ -2,38 +2,34 @@ import styled, { css } from 'styled-components';
 
 export const Content = styled.div`
     display: flex;
+    flex-direction: column;
     width: 100%;
     background: #fff;
     border-radius: 4px;
-    background: yellow;
+    padding: 26px 30px;
 `;
 
 export const FormBody = styled.div``;
 
 export const FormStyle = styled.div`
-    min-width: 50%;
-    background: orange;
+    min-width: 80%; 
     form {
         width: 100%;
-        background: blue;
         label {
             display: flex;
             flex-direction: column;
             font-size: 14px;
             color: #444444;
             font-weight: bold;
+            margin-bottom: 9px;
         }
-
         input {
-            background: red;
-            height: 45px;
+            display:flex;
+            width: 100%;
             border: 1px solid #dddddd;
             border-radius: 4px;
-            opacity: 1;
-            padding: 5px;
-            margin-top: 9px;
-            margin-bottom: 15px;
-        }
+            margin-bottom: 16px;
+        }   
     }
 
     button {
@@ -47,7 +43,6 @@ export const FormStyle = styled.div`
         font-size: 14px;
         transition: background 0.2s;
         width: 100%;
-        margin-top: 15px;
         background: #7d40e7 0% 0% no-repeat padding-box;
         opacity: 1;
         width: 300px;
@@ -55,64 +50,150 @@ export const FormStyle = styled.div`
     }
 `;
 
-export const Title = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    margin-top: 34px;
-    color: #444444;
-    opacity: 1;
-    font-size: 24px;
-    font-weight: bold;
-    width: 80%;
-`;
-
 export const LinkButton = styled.div`
-    display: flex;
+    /* display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    margin-top: 15px;
-    background: #7d40e7;
-    height: 36px;
-    a {
+    width:100%;
+    margin-bottom: 20px;
+    a, button {
         display: flex;
         align-items: center;
-        width: 142px;
+        justify-items: center; 
+        border-radius: 4px;
         text-transform: uppercase;
+        width: 142px;
         height: 36px;
-        text-decoration: none;
         color: #fff;
         font-weight: bold;
-
+    }
+    button { margin-left: 10px; }  
+    a {
+        color: #fff;
+        font-weight: bold;
+        background: #7D40E7; 
+        height: 36px;
+        text-decoration: none; 
         svg {
             margin: 8px 8px 8px 16px;
         }
+    } */
+`;
+
+
+export const TopButtons = styled.div`
+    display: flex;
+    align-items:center;
+
+    justify-content: flex-end; 
+
+    margin-top: 34px;
+    margin-bottom: 27px;
+    width:100%;
+
+    .btnBack{
+        background: #CCCCCC
     }
+
+    a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        svg {
+            margin: 8px 8px 8px 16px;
+        }    
+    }
+
+    a, button {
+        background: #7D40E7;
+        width: 142px;
+        margin-left: 10px;
+        text-transform: uppercase;
+        border-radius: 4px;
+        color: #fff;
+        font-weight: bold;
+    } 
+
+   
+`;
+
+export const Title = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 36px;
+  
+    width: 100%;
+    color: #444444;
+    font-size: 24px;
+    font-weight: bold;
+    /* display: flex;
+    align-items: center;
+    justify-items: center;
+  
+   
+    opacity: 1;
+   
+    width: 80%; */
+`;
+
+export const TopTitle = styled.div`
+    display: flex;
+    align-items: center;
+   
+    width: 100%;
+    color: #444444;
+    font-size: 24px;
+    font-weight: bold;
+    /* display: flex;
+    align-items: center;
+    justify-items: center;
+  
+   
+    opacity: 1;
+   
+    width: 80%; */
+`;
+
+
+
+
+export const RowButtons = styled.div`
+    display: flex;
+    justify-items:center;    
+    justify-content: space-between; 
+    width: 100%;
+`;
+
+export const ContentTopButtons = styled.div`
+    display: flex;
+    justify-content: space-between; 
+    width: 100%;
 `;
 
 export const Row = styled.div`
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex: 1;
+    width: 100%;
+    margin: 10px;
 `;
 
 export const Column = styled.div`
-    background: pink;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     margin: 10px;
+    width: 100%;
 `;
 
 export const SearchInput = styled.div`
     display: flex;
-    align-items: center;
-
-    input {
+    /* input, select {
         width: 237px;
         height: 36px;
         border: 1px solid #dddddd;
         border-radius: 4px;
         margin-top: 34px;
         margin-bottom: 22px;
-    }
+    } */
 `;
 
 export const NameInitials = styled.div`

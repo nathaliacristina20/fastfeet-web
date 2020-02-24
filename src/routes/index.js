@@ -12,6 +12,9 @@ import Delivery from '~/pages/Delivery/Form';
 import Deliverymans from '~/pages/Deliverymans/Home';
 import Deliveryman from '~/pages/Deliverymans/Form';
 
+import Recipients from '~/pages/Recipients/Home';
+import Recipient from '~/pages/Recipients/Form';
+
 export default function Routes() {
     return (
         <Switch>
@@ -21,12 +24,14 @@ export default function Routes() {
                 path="/encomendas/novo"
                 exact
                 isPrivate
+                title="Cadastro de encomendas"
                 component={Delivery}
             />
             <Route
                 path="/encomendas/:id/editar"
                 exact
                 isPrivate
+                title="Edição de encomendas"
                 component={Delivery}
             />
             <Route
@@ -39,13 +44,36 @@ export default function Routes() {
                 path="/entregadores/novo"
                 exact
                 isPrivate
+                title="Cadastro de entregadores"
                 component={Deliveryman}
             />
             <Route
                 path="/entregadores/:id/editar"
                 exact
                 isPrivate
+                title="Edição de entregadores"
                 component={Deliveryman}
+            />
+
+            <Route
+                path="/destinatarios"
+                exact
+                isPrivate
+                component={Recipients}
+            />
+            <Route
+                path="/destinatarios/novo"
+                exact
+                isPrivate
+                title="Cadastro de destinatário"
+                component={Recipient}
+            />
+            <Route
+                path="/destinatarios/:id/editar"
+                exact
+                isPrivate
+                title="Edição de destinatário"
+                component={Recipient}
             />
         </Switch>
     );

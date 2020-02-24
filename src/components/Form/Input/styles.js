@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    display: flex;
-    justify-content: center;
+
+    input {
+        height: 45px;
+    }
+    
 `;
 
 export const Row = styled.div`

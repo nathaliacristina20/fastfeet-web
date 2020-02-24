@@ -45,7 +45,7 @@ export default function SignIn() {
                     />
                     <Input name="password" type="password" label="SUA SENHA" />
                     <ButtonSignIn>
-                        <button type="button">Entrar no sistema</button>
+                        <button type="submit">Entrar no sistema</button>
                     </ButtonSignIn>
                 </Form>
             </Content>

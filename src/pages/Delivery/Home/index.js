@@ -9,8 +9,6 @@ import {
 } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-import { toast } from 'react-toastify';
-
 import { Badge, Container } from './styles';
 import api from '~/services/api';
 
@@ -35,8 +33,6 @@ export default function Deliveries() {
 
     useEffect(() => {
         async function loadDeliveries() {
-            toast.error(`dsdsa`);
-            console.tron.log('ssssss');
             const response = await api.get('deliveries');
             setDeliveries(response.data);
         }

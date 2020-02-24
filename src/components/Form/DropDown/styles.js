@@ -18,7 +18,6 @@ export const Container = styled.div`
             justify-content: center;
         }
         li {
-            background: lime;
             text-align: left;
             letter-spacing: 0;
             color: #999999;

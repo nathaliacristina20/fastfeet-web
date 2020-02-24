@@ -1,15 +1,17 @@
-import React, { useSelector, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { useDispatch } from 'react-redux';
+
 import * as Yup from 'yup';
 import { Form } from '@unform/web';
-import { Container, Content, ButtonSignIn } from './styles';
-
-import InputComponent from '../../components/Form/Input';
 
 import { signInRequest } from '~/store/modules/auth/actions';
 
 import validateInputForm from '../../components/Util/ErrorHandler';
+
+import { Container, Content, ButtonSignIn } from './styles';
+
+import Input from '~/components/Form/Input';
 
 export default function SignIn() {
     const formRef = useRef(null);
@@ -34,20 +36,16 @@ export default function SignIn() {
         <Container>
             <Content>
                 <Form ref={formRef} onSubmit={handleSubmit}>
-                    <InputComponent
+                    <Input
                         name="email"
                         type="email"
                         label="email"
                         placeholder="SEU E-MAIL"
                         error="dsada"
                     />
-                    <InputComponent
-                        name="password"
-                        type="password"
-                        label="SUA SENHA"
-                    />
+                    <Input name="password" type="password" label="SUA SENHA" />
                     <ButtonSignIn>
-                        <button type="submit">Entrar no sistema</button>
+                        <button type="button">Entrar no sistema</button>
                     </ButtonSignIn>
                 </Form>
             </Content>

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Container, Content, Logo, Navigation, Logout } from './styles';
 
 import logo from '../../assets/fastfeet.svg';
 
+import { signOut } from '~/store/modules/auth/actions';
+
 export default function Menu() {
+    const dispatch = useDispatch();
+
     const [breadcrumbs, setBreadcrumbs] = useState([
         { route: '/encomendas', label: 'Encomendas', active: true },
         { route: '/entregadores', label: 'Entregadores', active: false },
@@ -16,7 +20,17 @@ export default function Menu() {
 
     const profile = useSelector(state => state.user.profile);
 
-    function handleSignOut() {}
+    function handleSignOut() {
+        dispatch(signOut());
+    }
+
+    function handleChangeBreadcrumbs(label) {
+        const data = breadcrumbs.map(breadcrumb => ({
+            ...breadcrumb,
+            active: breadcrumb.label === label && true,
+        }));
+        setBreadcrumbs(data);
+    }
 
     return (
         <Container>
@@ -31,6 +45,9 @@ export default function Menu() {
                                 key={breadcrumb.label}
                                 className={breadcrumb.active ? 'active' : ''}
                                 to={breadcrumb.route}
+                                onClick={() =>
+                                    handleChangeBreadcrumbs(breadcrumb.label)
+                                }
                             >
                                 {breadcrumb.label}
                             </Link>

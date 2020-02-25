@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import { Container, Content, Logo, Navigation, Logout } from './styles';
 
@@ -11,25 +11,17 @@ import { signOut } from '~/store/modules/auth/actions';
 export default function Menu() {
     const dispatch = useDispatch();
 
-    const [breadcrumbs, setBreadcrumbs] = useState([
-        { route: '/encomendas', label: 'Encomendas', active: true },
-        { route: '/entregadores', label: 'Entregadores', active: false },
-        { route: '/destinatarios', label: 'Destinatarios', active: false },
-        { route: '/problemas', label: 'Problemas', active: false },
-    ]);
+    const breadcrumbs = [
+        { route: '/encomendas', label: 'Encomendas' },
+        { route: '/entregadores', label: 'Entregadores' },
+        { route: '/destinatarios', label: 'Destinatários' },
+        { route: '/problemas', label: 'Problemas' },
+    ];
 
     const profile = useSelector(state => state.user.profile);
 
     function handleSignOut() {
         dispatch(signOut());
-    }
-
-    function handleChangeBreadcrumbs(label) {
-        const data = breadcrumbs.map(breadcrumb => ({
-            ...breadcrumb,
-            active: breadcrumb.label === label && true,
-        }));
-        setBreadcrumbs(data);
     }
 
     return (
@@ -41,16 +33,16 @@ export default function Menu() {
                 <Navigation active>
                     <nav>
                         {breadcrumbs.map(breadcrumb => (
-                            <Link
+                            <NavLink
                                 key={breadcrumb.label}
-                                className={breadcrumb.active ? 'active' : ''}
                                 to={breadcrumb.route}
-                                onClick={() =>
-                                    handleChangeBreadcrumbs(breadcrumb.label)
-                                }
+                                activeStyle={{
+                                    fontWeight: 'bold',
+                                    color: '#000',
+                                }}
                             >
                                 {breadcrumb.label}
-                            </Link>
+                            </NavLink>
                         ))}
                     </nav>
                 </Navigation>

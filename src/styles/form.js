@@ -9,10 +9,8 @@ export const Content = styled.div`
     padding: 26px 30px;
 `;
 
-export const FormBody = styled.div``;
-
 export const FormStyle = styled.div`
-    min-width: 80%; 
+    min-width: 80%;
     form {
         width: 100%;
         label {
@@ -24,12 +22,16 @@ export const FormStyle = styled.div`
             margin-bottom: 9px;
         }
         input {
-            display:flex;
+            display: flex;
             width: 100%;
             border: 1px solid #dddddd;
             border-radius: 4px;
             margin-bottom: 16px;
-        }   
+            padding-left: 25px;
+            font-size: 16px;
+            letter-spacing: 0;
+            color: #666666;
+        }
     }
 
     button {
@@ -50,48 +52,18 @@ export const FormStyle = styled.div`
     }
 `;
 
-export const LinkButton = styled.div`
-    /* display: flex;
-    align-items: center;
-    width:100%;
-    margin-bottom: 20px;
-    a, button {
-        display: flex;
-        align-items: center;
-        justify-items: center; 
-        border-radius: 4px;
-        text-transform: uppercase;
-        width: 142px;
-        height: 36px;
-        color: #fff;
-        font-weight: bold;
-    }
-    button { margin-left: 10px; }  
-    a {
-        color: #fff;
-        font-weight: bold;
-        background: #7D40E7; 
-        height: 36px;
-        text-decoration: none; 
-        svg {
-            margin: 8px 8px 8px 16px;
-        }
-    } */
-`;
-
-
 export const TopButtons = styled.div`
     display: flex;
-    align-items:center;
+    align-items: center;
 
-    justify-content: flex-end; 
+    justify-content: flex-end;
 
     margin-top: 34px;
     margin-bottom: 27px;
-    width:100%;
+    width: 100%;
 
-    .btnBack{
-        background: #CCCCCC
+    .btnBack {
+        background: #cccccc;
     }
 
     a {
@@ -100,27 +72,26 @@ export const TopButtons = styled.div`
         text-decoration: none;
         svg {
             margin: 8px 8px 8px 16px;
-        }    
+        }
     }
 
-    a, button {
-        background: #7D40E7;
+    a,
+    button {
+        background: #7d40e7;
         width: 142px;
         margin-left: 10px;
         text-transform: uppercase;
         border-radius: 4px;
         color: #fff;
         font-weight: bold;
-    } 
-
-   
+    }
 `;
 
 export const Title = styled.div`
     display: flex;
     align-items: center;
     margin-top: 36px;
-  
+
     width: 100%;
     color: #444444;
     font-size: 24px;
@@ -138,7 +109,7 @@ export const Title = styled.div`
 export const TopTitle = styled.div`
     display: flex;
     align-items: center;
-   
+
     width: 100%;
     color: #444444;
     font-size: 24px;
@@ -151,22 +122,6 @@ export const TopTitle = styled.div`
     opacity: 1;
    
     width: 80%; */
-`;
-
-
-
-
-export const RowButtons = styled.div`
-    display: flex;
-    justify-items:center;    
-    justify-content: space-between; 
-    width: 100%;
-`;
-
-export const ContentTopButtons = styled.div`
-    display: flex;
-    justify-content: space-between; 
-    width: 100%;
 `;
 
 export const Row = styled.div`
@@ -182,18 +137,6 @@ export const Column = styled.div`
     flex-direction: column;
     margin: 10px;
     width: 100%;
-`;
-
-export const SearchInput = styled.div`
-    display: flex;
-    /* input, select {
-        width: 237px;
-        height: 36px;
-        border: 1px solid #dddddd;
-        border-radius: 4px;
-        margin-top: 34px;
-        margin-bottom: 22px;
-    } */
 `;
 
 export const NameInitials = styled.div`

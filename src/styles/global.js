@@ -32,7 +32,7 @@ export default createGlobalStyle`
     button {
         cursor: pointer;
     }
-    .grid {
+    .table {
         border-collapse: separate;
         border-spacing: 0 21px;
         width: 100%;
@@ -62,12 +62,10 @@ export default createGlobalStyle`
         td {
             background: #fff;
             padding: 20px 20px 20px 0;
-            border-left-width: 0;
             font-size: 16px;
             text-align: left;
-            letter-spacing: 0;
             color: #666666;
-            opacity: 1;
+            border-radius: 4px;
         }
 
         .circulo {

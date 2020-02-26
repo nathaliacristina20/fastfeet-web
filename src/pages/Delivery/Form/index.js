@@ -10,6 +10,8 @@ import * as Yup from 'yup';
 import { Container } from './styles';
 import { Content, Column, Row, FormStyle } from '~/styles/form';
 
+import history from '~/services/history';
+
 import Input from '~/components/Form/Input';
 import api from '~/services/api';
 import FormButtons from '~/components/Form/FormButtons';
@@ -32,19 +34,6 @@ export default function Delivery({ title, location }) {
         }
     }
 
-    // useEffect(() => {
-    //     async function loadDeliverymans() {
-    //         const { data } = await api.get('deliverymans');
-    //         const options = data.map(option => ({
-    //             label: option.name,
-    //             value: option.id,
-    //         }));
-    //         console.tron.log(options);
-    //         setDeliveryman(options);
-    //     }
-    //     loadDeliverymans();
-    // }, []);
-
     async function loadDeliverymans() {
         try {
             const response = await api.get('deliverymans');
@@ -52,7 +41,6 @@ export default function Delivery({ title, location }) {
                 label: deliveryman.name,
                 value: deliveryman.id,
             }));
-            // setDeliveryman(values);
             return values;
         } catch (err) {
             toast.error('Ocorreu um erro ao carregar os Entregadores.');
@@ -78,15 +66,10 @@ export default function Delivery({ title, location }) {
                 abortEarly: false,
             });
 
-            // if (recipient && recipient.id) {
-            //     await api.put(`recipients/${recipient.id}`, data);
-            //     toast.success('Registro editado com sucesso.');
-            // } else {
-            //     await api.post('recipients', data);
-            //     toast.success('Registro salvo com sucesso.');
-            // }
+            await api.post('deliveries', data);
+            toast.success('Registro salvo com sucesso.');
 
-            // history.push('/destinatarios');
+            history.push('/encomendas');
 
             // formRef.current.setErrors({});
             // reset();
@@ -102,13 +85,6 @@ export default function Delivery({ title, location }) {
             }
         }
     }
-    // const loadRecipients = [
-    //     {
-    //         id: `dasdsa`,
-    //         value: `dsadsa`,
-    //         label: `dsadsa`,
-    //     },
-    // ];
 
     return (
         <Container>

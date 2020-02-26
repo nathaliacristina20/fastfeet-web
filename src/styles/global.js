@@ -32,6 +32,17 @@ export default createGlobalStyle`
     button {
         cursor: pointer;
     }
+
+    .has-error {
+        border: 1px solid #ff6347;
+    }
+
+    .error {
+        margin: 3px 0;
+        font-size: 12px;
+        color: #ff6347;
+    }
+    
     .table {
         border-collapse: separate;
         border-spacing: 0 21px;

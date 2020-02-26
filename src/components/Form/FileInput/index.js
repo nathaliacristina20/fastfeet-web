@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useField } from '@unform/core';
-
+import PropTypes from 'prop-types';
 import {
     Container,
     Preview,
@@ -65,6 +65,7 @@ export default function InputFile({ name, label, schema, initial, ...rest }) {
                 accept="image/*"
                 ref={inputRef}
                 id={name}
+                defaultValue={defaultValue}
                 onChange={handlePreview}
                 {...rest}
             />
@@ -72,3 +73,16 @@ export default function InputFile({ name, label, schema, initial, ...rest }) {
         </Container>
     );
 }
+
+InputFile.propTypes = {
+    name: PropTypes.string.isRequired,
+    label: PropTypes.string,
+    schema: PropTypes.object,
+    initial: PropTypes.string,
+};
+
+InputFile.defaultProps = {
+    label: null,
+    schema: {},
+    initial: null,
+};

@@ -6,36 +6,31 @@ import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
+
 import { Container } from './styles';
 import { Content, Column, Row, FormStyle } from '~/styles/form';
+
 import Input from '~/components/Form/Input';
 import api from '~/services/api';
-
 import FormButtons from '~/components/Form/FormButtons';
+import Select from '~/components/Form/AsyncSelect';
 
 export default function Delivery({ title, location }) {
     const formRef = useRef(null);
-
-    // const { id } = match.params;
-
     const [data] = useState(location.state ? location.state.delivery : []);
-
-    const [deliveryman] = useState(null);
-    const [recipient] = useState(null);
-
-    // async function loadRecipients() {
-    //     try {
-    //         const response = await api.get('recipients');
-    //         const values = response.data.map(recipient => ({
-    //             label: recipient.name,
-    //             value: recipient.id,
-    //         }));
-    //         return values;
-    //     } catch (err) {
-    //         toast.error('Ocorreu um erro ao carregar os Destinatarios.');
-    //         return [];
-    //     }
-    // }
+    async function loadRecipients() {
+        try {
+            const response = await api.get('recipients');
+            const values = response.data.map(recipient => ({
+                label: recipient.name,
+                value: recipient.id,
+            }));
+            return values;
+        } catch (err) {
+            toast.error('Ocorreu um erro ao carregar os Destinatarios.');
+            return [];
+        }
+    }
 
     // useEffect(() => {
     //     async function loadDeliverymans() {
@@ -50,39 +45,70 @@ export default function Delivery({ title, location }) {
     //     loadDeliverymans();
     // }, []);
 
-    // async function loadDeliverymans() {
-    //     try {
-    //         const response = await api.get('deliverymans');
-    //         const values = response.data.map(deliveryman => ({
-    //             label: deliveryman.name,
-    //             value: deliveryman.id,
-    //         }));
-    //         console.log(values[0]);
-    //         setDeliveryman(values[0]);
-    //         return values;
-    //     } catch (err) {
-    //         toast.error('Ocorreu um erro ao carregar os Entregadores.');
-    //         return [];
-    //     }
-    // }
+    async function loadDeliverymans() {
+        try {
+            const response = await api.get('deliverymans');
+            const values = response.data.map(deliveryman => ({
+                label: deliveryman.name,
+                value: deliveryman.id,
+            }));
+            // setDeliveryman(values);
+            return values;
+        } catch (err) {
+            toast.error('Ocorreu um erro ao carregar os Entregadores.');
+            return [];
+        }
+    }
+
+    const schema = Yup.object().shape({
+        recipient_id: Yup.number()
+            .typeError('Campo obrigatorio')
+            .positive()
+            .required('Campo obrigatorio'),
+        deliveryman_id: Yup.number()
+            .required('Campo obrigatorio')
+            .typeError('Campo obrigatorio'),
+        product: Yup.string().required('Campo obrigatorio'),
+    });
 
     async function handleSubmit(data, { reset }) {
-        // const schema = Yup.object().shape({
-        //     product: Yup.string().required(),
-        // });
-        // if (validateInputForm(schema, data, formRef, reset)) {
-        //     try {
-        //         await api.post('deliveries', {
-        //             deliveryman_id: deliveryman,
-        //             recipient_id: recipient,
-        //             product: data.product,
-        //         });
-        //         toast.success('Registro salvo com sucesso!');
-        //     } catch (err) {
-        //         toast.error('Ocorreu um erro ao salvar o registro.');
-        //     }
-        // }
+        console.log(data);
+        try {
+            await schema.validate(data, {
+                abortEarly: false,
+            });
+
+            // if (recipient && recipient.id) {
+            //     await api.put(`recipients/${recipient.id}`, data);
+            //     toast.success('Registro editado com sucesso.');
+            // } else {
+            //     await api.post('recipients', data);
+            //     toast.success('Registro salvo com sucesso.');
+            // }
+
+            // history.push('/destinatarios');
+
+            // formRef.current.setErrors({});
+            // reset();
+        } catch (err) {
+            if (err instanceof Yup.ValidationError) {
+                const errorMessages = {};
+                err.inner.forEach(error => {
+                    errorMessages[error.path] = error.message;
+                });
+                formRef.current.setErrors(errorMessages);
+            } else {
+                toast.error('Ocorreu um erro ao salvar a encomenda.');
+            }
+        }
     }
+    // const loadRecipients = [
+    //     {
+    //         id: `dasdsa`,
+    //         value: `dsadsa`,
+    //         label: `dsadsa`,
+    //     },
+    // ];
 
     return (
         <Container>
@@ -92,23 +118,18 @@ export default function Delivery({ title, location }) {
                     <Content>
                         <Row>
                             <Column>
-                                <label>Destinatario</label>
-                                {/* <AsyncSelect
-                                    cacheOptions
-                                    defaultOptions
-                                    loadOptions={loadRecipients}
+                                <Select
+                                    label="Destinatário"
                                     name="recipient_id"
-                                    onChange={option =>
-                                        setRecipient(option.value)
-                                    }
-                                    noOptionsMessage={() =>
-                                        'Nenhum registro localizado'
-                                    }
-                                    loadingMessage={() => 'Carregando...'}
-                                /> */}
+                                    loadOptions={loadRecipients}
+                                />
                             </Column>
                             <Column>
-                                <label>Entregador</label>
+                                <Select
+                                    label="Entregador"
+                                    name="deliveryman_id"
+                                    loadOptions={loadDeliverymans}
+                                />
                             </Column>
                         </Row>
                         <Row>

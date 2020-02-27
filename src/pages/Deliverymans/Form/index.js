@@ -16,19 +16,22 @@ import api from '~/services/api';
 
 import { Container } from './styles';
 
+import history from '~/services/history';
+
 export default function Deliveryman({ title, location }) {
     const formRef = useRef(null);
 
-    const [data] = useState(location.state ? location.state.deliveryman : []);
-    console.tron.log(data);
-    const [avatar, setAvatar] = useState(null);
+    const [deliveryman] = useState(location.state);
+
+    const [avatar, setAvatar] = useState(
+        deliveryman && deliveryman.avatar && deliveryman.avatar.id
+    );
 
     const schema = Yup.object().shape({
         name: Yup.string().required('Campo obrigatório'),
         email: Yup.string()
             .email('E-mail inválido')
             .required('Campo obrigatório'),
-        avatar_id: Yup.number().required('Campo obrigatório'),
     });
 
     async function handleSubmit(data, { reset }) {
@@ -59,18 +62,25 @@ export default function Deliveryman({ title, location }) {
                 }
             );
 
-            await api.post('deliverymans', {
-                name,
-                email,
-                avatar_id,
-            });
+            if (deliveryman && deliveryman.id) {
+                await api.put(`deliverymans/${deliveryman.id}`, {
+                    name,
+                    email,
+                    avatar_id: avatar_id || null,
+                });
+            } else {
+                await api.post('deliverymans', {
+                    name,
+                    email,
+                    avatar_id,
+                });
+            }
 
-            reset();
             setAvatar(null);
-            formRef.current.setErrors({});
             toast.success('Registro salvo com sucesso!');
+
+            history.push('/entregadores');
         } catch (err) {
-            toast.error(err);
             if (err instanceof Yup.ValidationError) {
                 const errorMessages = {};
                 err.inner.forEach(error => {
@@ -86,13 +96,21 @@ export default function Deliveryman({ title, location }) {
     return (
         <Container>
             <FormStyle>
-                <Form ref={formRef} initialData={data} onSubmit={handleSubmit}>
+                <Form
+                    ref={formRef}
+                    initialData={deliveryman}
+                    onSubmit={handleSubmit}
+                >
                     <FormButtons pathname="entregadores" title={title} />
                     <Content>
                         <Row>
                             <Column>
                                 <InputFile
-                                    initial={data.avatar && data.avatar.url}
+                                    initial={
+                                        deliveryman &&
+                                        deliveryman.avatar &&
+                                        deliveryman.avatar.url
+                                    }
                                     name="avatar_id"
                                 />
                             </Column>
@@ -120,7 +138,7 @@ export default function Deliveryman({ title, location }) {
 }
 
 Deliveryman.propTypes = {
-    location: PropTypes.func,
+    location: PropTypes.object,
     title: PropTypes.string.isRequired,
 };
 

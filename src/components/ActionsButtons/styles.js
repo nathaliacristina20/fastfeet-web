@@ -46,6 +46,11 @@ export const Actions = styled.div`
     display: flex;
     justify-content: center;
     z-index: 1;
+
+    a,
+    li {
+        color: #999999;
+    }
 `;
 
 export const Button = styled.div`

@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Container, Button, Actions, Chapeu, Content } from './styles';
 
-export default function ActionsButtons({ pathname, state }) {
+export default function ActionsButtons({ pathname, state, deleteHandle }) {
     // const inputRef = useRef(teste);
 
     const [open, setOpen] = useState(false);
@@ -29,7 +29,7 @@ export default function ActionsButtons({ pathname, state }) {
                     <ul className={open ? 'opened' : 'closed'}>
                         <li>
                             <MdRemoveRedEye size={16} color="#7D40E7" />
-                            Visualizar
+                            <span>Visualizar</span>
                         </li>
                         <li>
                             <Link
@@ -44,7 +44,7 @@ export default function ActionsButtons({ pathname, state }) {
                         </li>
                         <li>
                             <MdDeleteForever size={16} color="#DE3B3B" />
-                            Excluir
+                            <span onClick={deleteHandle}>Excluir</span>
                         </li>
                     </ul>
                 </Actions>
@@ -56,6 +56,7 @@ export default function ActionsButtons({ pathname, state }) {
 ActionsButtons.propTypes = {
     pathname: PropTypes.string.isRequired,
     state: PropTypes.object,
+    deleteHandle: PropTypes.func,
 };
 
 ActionsButtons.defaultProps = {

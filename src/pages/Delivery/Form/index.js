@@ -19,7 +19,8 @@ import Select from '~/components/Form/AsyncSelect';
 
 export default function Delivery({ title, location }) {
     const formRef = useRef(null);
-    const [data] = useState(location.state ? location.state.delivery : []);
+    const [delivery, setDelivery] = useState(location.state);
+
     async function loadRecipients() {
         try {
             const response = await api.get('recipients');
@@ -60,19 +61,23 @@ export default function Delivery({ title, location }) {
     });
 
     async function handleSubmit(data, { reset }) {
-        console.log(data);
         try {
             await schema.validate(data, {
                 abortEarly: false,
             });
 
-            await api.post('deliveries', data);
-            toast.success('Registro salvo com sucesso.');
+            if (delivery && delivery.id) {
+                await api.put(
+                    `deliveryman/${delivery.deliveryman_id}/deliveries/${delivery.id}`,
+                    data
+                );
+                toast.success('Registro editado com sucesso.');
+            } else {
+                await api.post('deliveries', data);
+                toast.success('Registro salvo com sucesso.');
+            }
 
             history.push('/encomendas');
-
-            // formRef.current.setErrors({});
-            // reset();
         } catch (err) {
             if (err instanceof Yup.ValidationError) {
                 const errorMessages = {};
@@ -89,7 +94,11 @@ export default function Delivery({ title, location }) {
     return (
         <Container>
             <FormStyle>
-                <Form ref={formRef} initialData={data} onSubmit={handleSubmit}>
+                <Form
+                    ref={formRef}
+                    initialData={delivery}
+                    onSubmit={handleSubmit}
+                >
                     <FormButtons title={title} pathname="encomendas" />
                     <Content>
                         <Row>

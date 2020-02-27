@@ -49,14 +49,10 @@ export default function InputFile({ name, label, schema, initial, ...rest }) {
                         <Preview>
                             <img src={preview} alt="Preview" />
                         </Preview>
-                    ) : !error ? (
+                    ) : (
                         <PreviewDefault>
                             <PreviewText>Adicionar foto</PreviewText>
                         </PreviewDefault>
-                    ) : (
-                        <PreviewDefaultError>
-                            <PreviewText>Arquivo obrigatorio!</PreviewText>
-                        </PreviewDefaultError>
                     )}
                 </ContentPreview>
             </label>
@@ -65,7 +61,6 @@ export default function InputFile({ name, label, schema, initial, ...rest }) {
                 accept="image/*"
                 ref={inputRef}
                 id={name}
-                defaultValue={defaultValue}
                 onChange={handlePreview}
                 {...rest}
             />

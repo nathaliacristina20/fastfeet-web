@@ -1,22 +1,23 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Content = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
+    width: 100%;
     ul {
         position: absolute;
-        width: 150px;
+
         background: #ffffff;
         box-shadow: 0px 0px 2px #00000026;
         border-radius: 4px;
         padding: 22px 11px;
-
         li {
             border-bottom: 1px solid #eeeeee;
             padding: 9px;
             display: flex;
             align-items: center;
+            font-size: 16px;
 
             svg {
                 margin-right: 10px;

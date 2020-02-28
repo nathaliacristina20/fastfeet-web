@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 
-import {
-    MdMoreHoriz,
-    MdRemoveRedEye,
-    MdDeleteForever,
-    MdModeEdit,
-} from 'react-icons/md';
+import { MdMoreHoriz, MdModeEdit } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Container, Button, Actions, Chapeu, Content } from './styles';
 
-export default function ActionsButtons({ pathname, state, deleteHandle }) {
+import AlertConfirm from '~/components/Alert/Confirm';
+import AlertModal from '~/components/Alert/AlertModal';
+
+export default function ActionsButtons({
+    pathname,
+    state,
+    textDelete,
+    deleteHandle,
+    showHandle,
+    width,
+}) {
     // const inputRef = useRef(teste);
 
     const [open, setOpen] = useState(false);
@@ -23,14 +28,15 @@ export default function ActionsButtons({ pathname, state, deleteHandle }) {
             <Button onClick={openToggle}>
                 <MdMoreHoriz size={20} color="#C6C6C6" />
             </Button>
-            <Content>
+            <Content width={250}>
                 <Actions>
                     <Chapeu className={open ? 'opened' : 'closed'} />
                     <ul className={open ? 'opened' : 'closed'}>
-                        <li>
-                            <MdRemoveRedEye size={16} color="#7D40E7" />
-                            <span>Visualizar</span>
-                        </li>
+                        {showHandle && (
+                            <li>
+                                <AlertModal showHTML={showHandle} />
+                            </li>
+                        )}
                         <li>
                             <Link
                                 to={{
@@ -43,8 +49,10 @@ export default function ActionsButtons({ pathname, state, deleteHandle }) {
                             </Link>
                         </li>
                         <li>
-                            <MdDeleteForever size={16} color="#DE3B3B" />
-                            <span onClick={deleteHandle}>Excluir</span>
+                            <AlertConfirm
+                                confirm={() => deleteHandle()}
+                                title={textDelete || 'Excluir'}
+                            />
                         </li>
                     </ul>
                 </Actions>
@@ -56,9 +64,14 @@ export default function ActionsButtons({ pathname, state, deleteHandle }) {
 ActionsButtons.propTypes = {
     pathname: PropTypes.string.isRequired,
     state: PropTypes.object,
+    textDelete: PropTypes.string,
     deleteHandle: PropTypes.func,
+    showHandle: PropTypes.func,
+    width: PropTypes.number,
 };
 
 ActionsButtons.defaultProps = {
     state: [],
+    textDelete: '',
+    width: 150,
 };

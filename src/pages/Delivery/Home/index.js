@@ -93,6 +93,7 @@ export default function Deliveries() {
                                                 label: delivery.recipient.name,
                                             },
                                         }}
+                                        showHandle
                                     />
                                 </td>
                             </tr>

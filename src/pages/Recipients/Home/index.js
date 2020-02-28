@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { Container } from './styles';
 
 import api from '~/services/api';
@@ -18,6 +19,16 @@ export default function Recipients() {
 
         loadRecipients();
     }, []);
+
+    async function deleteHandle(id) {
+        try {
+            await api.delete(`recipients/${id}`);
+            setRecipients(recipients.filter(recipient => recipient.id !== id));
+            toast.success('Registro excluido com sucesso.');
+        } catch (err) {
+            toast.error('Ocorreu um erro ao excluir o registro.');
+        }
+    }
 
     return (
         <Container>
@@ -42,7 +53,13 @@ export default function Recipients() {
                                 <td>{recipient.name}</td>
                                 <td>{`${recipient.street},${recipient.number} ${recipient.complement}, ${recipient.city} - ${recipient.state}`}</td>
                                 <td>
-                                    <ActionsButtons />
+                                    <ActionsButtons
+                                        pathname={`/destinatarios/${recipient.id}/editar`}
+                                        state={recipient}
+                                        deleteHandle={() =>
+                                            deleteHandle(recipient.id)
+                                        }
+                                    />
                                 </td>
                             </tr>
                         ))}

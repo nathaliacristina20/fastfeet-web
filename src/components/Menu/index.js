@@ -34,6 +34,7 @@ export default function Menu() {
                     <nav>
                         {breadcrumbs.map(breadcrumb => (
                             <NavLink
+                                exact
                                 key={breadcrumb.label}
                                 to={breadcrumb.route}
                                 activeStyle={{

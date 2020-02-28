@@ -15,6 +15,8 @@ import Deliveryman from '~/pages/Deliverymans/Form';
 import Recipients from '~/pages/Recipients/Home';
 import Recipient from '~/pages/Recipients/Form';
 
+import DeliveryProblems from '~/pages/DeliveryProblems';
+
 export default function Routes() {
     return (
         <Switch>
@@ -33,6 +35,13 @@ export default function Routes() {
                 isPrivate
                 title="Edição de encomendas"
                 component={Delivery}
+            />
+            <Route
+                path="/encomendas/problemas"
+                exact
+                isPrivate
+                title="Problemas na entrega"
+                component={DeliveryProblems}
             />
             <Route
                 path="/entregadores"

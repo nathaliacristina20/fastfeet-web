@@ -15,7 +15,7 @@ export default function Menu() {
         { route: '/encomendas', label: 'Encomendas' },
         { route: '/entregadores', label: 'Entregadores' },
         { route: '/destinatarios', label: 'Destinatários' },
-        { route: '/problemas', label: 'Problemas' },
+        { route: '/encomendas/problemas', label: 'Problemas' },
     ];
 
     const profile = useSelector(state => state.user.profile);

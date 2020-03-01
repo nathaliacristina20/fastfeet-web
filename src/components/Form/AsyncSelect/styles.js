@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    .error {
-        font-size: 12px;
-        color: #ff6347;
+    .container {
+        height: 100px;
     }
+`;
+
+export const Error = styled.div`
+    padding-top: 10px;
 `;

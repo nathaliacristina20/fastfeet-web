@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { colourOptions } from '~/assets/shared/data';
 import { Container, NameInitials } from './styles';
 
-export default function Badge({ initials, name }) {
+export default function Badge({ initials, avatar, name }) {
     const [color, setColor] = useState([]);
 
     useEffect(() => {
@@ -18,8 +18,8 @@ export default function Badge({ initials, name }) {
 
     return (
         <Container>
-            <NameInitials colorBadge={color}>
-                <p>{initials}</p>
+            <NameInitials colorBadge={`${color}`}>
+                {avatar ? <img src={avatar} alt={name} /> : <p>{initials}</p>}
             </NameInitials>
             <p>{name}</p>
         </Container>
@@ -29,8 +29,10 @@ export default function Badge({ initials, name }) {
 Badge.propTypes = {
     initials: PropTypes.string.isRequired,
     name: PropTypes.string,
+    avatar: PropTypes.string,
 };
 
 Badge.defaultProps = {
     name: '',
+    avatar: '',
 };

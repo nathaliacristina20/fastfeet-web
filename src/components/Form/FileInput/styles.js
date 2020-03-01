@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { darken } from 'polished';
 
 export const Container = styled.div`
     input[type='file'] {
@@ -14,7 +15,16 @@ export const ContentPreview = styled.div`
 export const PreviewDefault = styled.div`
     display: flex;
     justify-content: center;
-    border: 1px dashed #dddddd;
+    ${props =>
+        props.color
+            ? css`
+                  border: 3px dashed ${darken(0.5, props.color)};
+                  background: ${props.color};
+              `
+            : css`
+                  border: 1px dashed #dddddd;
+              `}
+
     opacity: 1;
     width: 150px;
     height: 150px;
@@ -40,6 +50,19 @@ export const PreviewText = styled.div`
     align-items: center;
     justify-content: center;
     color: #ddd;
+`;
+
+export const PreviewTextInitials = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    font-size: 66px;
+    ${props =>
+        props.color &&
+        css`
+            color: ${darken(0.5, props.color)};
+        `}
 `;
 
 export const Preview = styled.div`

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Container, SearchInput, RowButtons, Title } from './styles';
 
-export default function FormHeader({ pathname, buttons, title }) {
+export default function FormHeader({ pathname, buttons, title, handleIndex }) {
     return (
         <Container>
             <Title>{title}</Title>
@@ -16,6 +16,7 @@ export default function FormHeader({ pathname, buttons, title }) {
                         <input
                             type="text"
                             placeholder={`Buscar por ${pathname}`}
+                            onKeyUp={handleIndex}
                         />
                     </SearchInput>
                     <Link to={`${pathname}/novo`}>
@@ -29,11 +30,14 @@ export default function FormHeader({ pathname, buttons, title }) {
 }
 
 FormHeader.propTypes = {
-    pathname: PropTypes.string.isRequired,
+    pathname: PropTypes.string,
     title: PropTypes.string.isRequired,
     buttons: PropTypes.bool,
+    handleIndex: PropTypes.func,
 };
 
 FormHeader.defaultProps = {
     buttons: true,
+    pathname: '',
+    handleIndex: null,
 };

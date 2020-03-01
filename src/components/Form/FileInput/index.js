@@ -6,16 +6,27 @@ import {
     Preview,
     PreviewDefault,
     PreviewDefaultError,
+    PreviewTextInitials,
     PreviewText,
     ContentPreview,
 } from './styles';
 
-export default function InputFile({ name, label, schema, initial, ...rest }) {
+import { colourOptions } from '~/assets/shared/data';
+
+export default function InputFile({
+    name,
+    name_initials,
+    label,
+    schema,
+    initial,
+    ...rest
+}) {
     const inputRef = useRef(null);
 
     const { fieldName, registerField, defaultValue, error } = useField(name);
 
     const [preview, setPreview] = useState(initial);
+    const [color, setColor] = useState([]);
 
     async function handlePreview(e) {
         const file = e.target.files[0];
@@ -41,17 +52,35 @@ export default function InputFile({ name, label, schema, initial, ...rest }) {
         });
     }, [fieldName, registerField]);
 
+    useEffect(() => {
+        function setColorOption() {
+            const colorRandom = Math.round(
+                Math.random() * (colourOptions.length - 1)
+            );
+            setColor(colourOptions[colorRandom]);
+        }
+        setColorOption();
+    }, []);
+
     return (
         <Container>
             <label htmlFor={name}>
                 <ContentPreview>
-                    {preview ? (
+                    {preview && (
                         <Preview>
                             <img src={preview} alt="Preview" />
                         </Preview>
-                    ) : (
+                    )}
+                    {!preview && !name_initials && (
                         <PreviewDefault>
                             <PreviewText>Adicionar foto</PreviewText>
+                        </PreviewDefault>
+                    )}
+                    {!preview && !initial && name_initials && (
+                        <PreviewDefault color={`${color}`}>
+                            <PreviewTextInitials color={`${color}`}>
+                                {name_initials}
+                            </PreviewTextInitials>
                         </PreviewDefault>
                     )}
                 </ContentPreview>

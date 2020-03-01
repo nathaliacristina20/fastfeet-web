@@ -1,87 +1,96 @@
-import React, { useRef, useEffect, useState } from 'react';
-import AsyncSelect from 'react-select/async';
-import PropTypes from 'prop-types';
+import React, { useRef, useState, useEffect } from 'react';
+import ReactSelect from 'react-select';
+import { useField } from '@unform/core';
 
-import { useField } from '@rocketseat/unform';
+import PropTypes from 'prop-types';
 
 import { Container } from './styles';
 
 export default function SelectInput({
     name,
     label,
-    onLoadOptions,
-    onChange,
-    placeholder,
+    formRef,
+    options,
+    ...rest
 }) {
-    const ref = useRef(null);
-    const { fieldName, registerField, defaultValue, error } = useField(name);
-    const [value, setValue] = useState();
+    const selectRef = useRef(null);
+    const { fieldName, defaultValue, registerField, error } = useField(name);
 
-    useEffect(() => {
-        setValue(defaultValue);
-    }, [defaultValue]);
+    const styleDefault = {
+        control: base => ({
+            ...base,
+            height: '45px',
+        }),
+    };
 
-    function parseSelectValue(selectRef) {
-        return selectRef.props.value || null;
-    }
+    const [styles, setStyles] = useState(styleDefault);
 
     useEffect(() => {
         registerField({
             name: fieldName,
-            ref: ref.current,
-            path: 'select.state.value',
-            parseValue: parseSelectValue,
-            clearValue: selectRef => {
-                selectRef.select.clearValue();
+            ref: selectRef.current,
+            path: 'state.value',
+            getValue: ref => {
+                if (rest.isMulti) {
+                    if (!ref.state.value) {
+                        return [];
+                    }
+                    return ref.state.value.map(option => option.value);
+                }
+                if (!ref.state.value) {
+                    return '';
+                }
+                return ref.state.value.value;
             },
         });
-  }, [ref.current, fieldName]); // eslint-disable-line
+    }, [fieldName, registerField, rest.isMulti]);
 
-    function handleChange(newValue) {
-        setValue(newValue);
-        if (onChange) {
-            onChange(newValue);
+    useEffect(() => {
+        if (error) {
+            setStyles({
+                control: (base, state) => ({
+                    ...base,
+                    height: '45px',
+                    border: '1px solid red',
+                }),
+            });
         }
+    }, [error]);
+
+    function clearFieldError() {
+        formRef.current.setFieldError(name, null);
+        setStyles(styleDefault);
     }
 
     return (
         <Container>
-            {label && <label htmlFor={fieldName}>{label}</label>}
-
-            <AsyncSelect
-                name={fieldName}
-                aria-label={fieldName}
-                id={fieldName}
-                isClearable
-                className="async-select"
-                classNamePrefix="async-select"
-                value={value}
-                onChange={handleChange}
-                isMulti={false}
-                loadOptions={inputValue => onLoadOptions(inputValue)}
+            <label htmlFor={selectRef}>{label}</label>
+            <ReactSelect
+                defaultValue={defaultValue}
+                ref={selectRef}
+                options={options}
+                classNamePrefix="react-select"
                 noOptionsMessage={() => 'Nenhum registro localizado'}
                 loadingMessage={() => 'Carregando...'}
-                ref={ref}
-                getOptionValue={option => option.id}
-                getOptionLabel={option => option.title || option.name}
-                placeholder={placeholder}
+                onInputChange={clearFieldError}
+                styles={styles}
+                {...rest}
             />
-
-            {error && <span>{error}</span>}
+            <br />
+            {error && <span className="error">{error}</span>}
         </Container>
     );
 }
 
 SelectInput.propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     label: PropTypes.string,
-    onLoadOptions: PropTypes.func.isRequired,
-    onChange: PropTypes.func,
     placeholder: PropTypes.string,
+    formRef: PropTypes.string.isRequired,
 };
 
 SelectInput.defaultProps = {
+    name: null,
     label: null,
-    onChange: null,
-    placeholder: 'Selecione...',
+    placeholder: '',
 };

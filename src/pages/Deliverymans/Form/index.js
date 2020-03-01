@@ -24,7 +24,7 @@ export default function Deliveryman({ title, location }) {
     const [deliveryman] = useState(location.state);
 
     const [avatar, setAvatar] = useState(
-        deliveryman && deliveryman.avatar && deliveryman.avatar.id
+        deliveryman && deliveryman.avatar && deliveryman.avatar_id
     );
 
     const schema = Yup.object().shape({
@@ -34,7 +34,7 @@ export default function Deliveryman({ title, location }) {
             .required('Campo obrigatório'),
     });
 
-    async function handleSubmit(data, { reset }) {
+    async function handleSubmit(data) {
         try {
             /**
              * Se tiver algum avatar no state quer dizer
@@ -111,13 +111,25 @@ export default function Deliveryman({ title, location }) {
                                         deliveryman.avatar &&
                                         deliveryman.avatar.url
                                     }
+                                    name_initials={
+                                        deliveryman &&
+                                        deliveryman.avatar === null
+                                            ? deliveryman.name_initials
+                                            : ''
+                                    }
                                     name="avatar_id"
+                                    formRef={formRef}
                                 />
                             </Column>
                         </Row>
                         <Row>
                             <Column>
-                                <Input type="text" name="name" label="Nome" />
+                                <Input
+                                    type="text"
+                                    name="name"
+                                    label="Nome"
+                                    formRef={formRef}
+                                />
                             </Column>
                         </Row>
                         <Row>
@@ -126,7 +138,7 @@ export default function Deliveryman({ title, location }) {
                                     type="email"
                                     name="email"
                                     label="Email"
-                                    placeholder="email@example.com"
+                                    formRef={formRef}
                                 />
                             </Column>
                         </Row>

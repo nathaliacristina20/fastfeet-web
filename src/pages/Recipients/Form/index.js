@@ -12,9 +12,15 @@ import { Container } from './styles';
 import { Content, Column, Row, FormStyle } from '~/styles/form';
 import Input from '~/components/Form/Input';
 
+import InputMask from '~/components/Form/InputMask';
+
 import FormButtons from '~/components/Form/FormButtons';
 
+import SelectInput from '~/components/Form/SelectInput';
+
 import api from '~/services/api';
+
+import { uf } from '~/assets/shared/data';
 
 export default function Recipient({ title, location }) {
     const formRef = useRef(null);
@@ -75,18 +81,29 @@ export default function Recipient({ title, location }) {
                     <Content>
                         <Row>
                             <Column>
-                                <Input type="text" name="name" label="Nome" />
+                                <Input
+                                    type="text"
+                                    name="name"
+                                    label="Nome"
+                                    formRef={formRef}
+                                />
                             </Column>
                         </Row>
                         <Row>
                             <Column>
-                                <Input type="text" name="street" label="Rua" />
+                                <Input
+                                    type="text"
+                                    name="street"
+                                    label="Rua"
+                                    formRef={formRef}
+                                />
                             </Column>
                             <Column>
                                 <Input
                                     type="text"
                                     name="number"
                                     label="Número"
+                                    formRef={formRef}
                                 />
                             </Column>
                             <Column>
@@ -94,25 +111,40 @@ export default function Recipient({ title, location }) {
                                     type="text"
                                     name="complement"
                                     label="Complemento"
+                                    formRef={formRef}
                                 />
                             </Column>
                         </Row>
                         <Row>
                             <Column>
-                                <Input type="text" name="city" label="Cidade" />
-                            </Column>
-                            <Column>
                                 <Input
                                     type="text"
-                                    name="state"
-                                    label="Estado"
+                                    name="city"
+                                    label="Cidade"
+                                    formRef={formRef}
                                 />
                             </Column>
                             <Column>
-                                <Input
-                                    type="text"
+                                <SelectInput
+                                    name="state"
+                                    label="Estado"
+                                    formRef={formRef}
+                                    placeholder=""
+                                    options={uf}
+                                    defaultValue={
+                                        recipient && {
+                                            value: recipient.state,
+                                            label: recipient.state,
+                                        }
+                                    }
+                                />
+                            </Column>
+                            <Column>
+                                <InputMask
                                     name="zip_code"
+                                    mask="99999-999"
                                     label="CEP"
+                                    formRef={formRef}
                                 />
                             </Column>
                         </Row>

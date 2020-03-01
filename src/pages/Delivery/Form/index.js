@@ -19,16 +19,15 @@ import Select from '~/components/Form/AsyncSelect';
 
 export default function Delivery({ title, location }) {
     const formRef = useRef(null);
-    const [delivery, setDelivery] = useState(location.state);
+    const [delivery] = useState(location.state);
 
     async function loadRecipients() {
         try {
-            const response = await api.get('recipients');
-            const values = response.data.map(recipient => ({
+            const { data } = await api.get('recipients');
+            return data.map(recipient => ({
                 label: recipient.name,
                 value: recipient.id,
             }));
-            return values;
         } catch (err) {
             toast.error('Ocorreu um erro ao carregar os Destinatarios.');
             return [];
@@ -37,12 +36,11 @@ export default function Delivery({ title, location }) {
 
     async function loadDeliverymans() {
         try {
-            const response = await api.get('deliverymans');
-            const values = response.data.map(deliveryman => ({
+            const { data } = await api.get('deliverymans');
+            return data.map(deliveryman => ({
                 label: deliveryman.name,
                 value: deliveryman.id,
             }));
-            return values;
         } catch (err) {
             toast.error('Ocorreu um erro ao carregar os Entregadores.');
             return [];
@@ -107,6 +105,13 @@ export default function Delivery({ title, location }) {
                                     label="Destinatário"
                                     name="recipient_id"
                                     loadOptions={loadRecipients}
+                                    formRef={formRef}
+                                    defaultValue={
+                                        delivery && {
+                                            value: delivery.recipient.id,
+                                            label: delivery.recipient.name,
+                                        }
+                                    }
                                 />
                             </Column>
                             <Column>
@@ -114,6 +119,13 @@ export default function Delivery({ title, location }) {
                                     label="Entregador"
                                     name="deliveryman_id"
                                     loadOptions={loadDeliverymans}
+                                    formRef={formRef}
+                                    defaultValue={
+                                        delivery && {
+                                            value: delivery.deliveryman.id,
+                                            label: delivery.deliveryman.name,
+                                        }
+                                    }
                                 />
                             </Column>
                         </Row>
@@ -123,6 +135,7 @@ export default function Delivery({ title, location }) {
                                     type="text"
                                     name="product"
                                     label="Nome do produto"
+                                    formRef={formRef}
                                 />
                             </Column>
                         </Row>

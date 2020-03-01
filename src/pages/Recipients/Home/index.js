@@ -10,11 +10,17 @@ import ActionsButtons from '~/components/ActionsButtons';
 
 export default function Recipients() {
     const [recipients, setRecipients] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function loadRecipients() {
-            const response = await api.get('recipients');
-            setRecipients(response.data);
+            const { data } = await api.get('recipients');
+            const dataFormatted = data.map(recipient => ({
+                ...recipient,
+                addressFormatted: `${recipient.street}, ${recipient.number} ${recipient.complement}, ${recipient.city} - ${recipient.state}`,
+            }));
+            setRecipients(dataFormatted);
+            setLoading(false);
         }
 
         loadRecipients();
@@ -30,28 +36,50 @@ export default function Recipients() {
         }
     }
 
+    async function handleRecipients(event) {
+        try {
+            const { data } = await api.get('recipients', {
+                params: { name: event.target.value },
+            });
+            const dataFormatted = data.map(recipient => ({
+                ...recipient,
+                addressFormatted: `${recipient.street}, ${recipient.number} ${recipient.complement}, ${recipient.city} - ${recipient.state}`,
+            }));
+            setRecipients(dataFormatted);
+        } catch (err) {
+            toast.error('Ocorreu um erro ao buscar os registros.');
+        }
+    }
+
     return (
         <Container>
             <FormHeader
                 pathname="destinatarios"
                 title="Gerenciando destinatários"
+                handleIndex={handleRecipients}
             />
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Endereço</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {recipients.length > 0 &&
-                        recipients.map(recipient => (
+
+            {loading && <center>Carregando..</center>}
+            {!loading && recipients.length === 0 && (
+                <center>Nenhum registro encontrado.</center>
+            )}
+
+            {!loading && recipients.length !== 0 && (
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Endereço</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {recipients.map(recipient => (
                             <tr key={recipient.id}>
                                 <td>{`#${recipient.id}`}</td>
                                 <td>{recipient.name}</td>
-                                <td>{`${recipient.street},${recipient.number} ${recipient.complement}, ${recipient.city} - ${recipient.state}`}</td>
+                                <td>{recipient.addressFormatted}</td>
                                 <td>
                                     <ActionsButtons
                                         pathname={`/destinatarios/${recipient.id}/editar`}
@@ -63,8 +91,9 @@ export default function Recipients() {
                                 </td>
                             </tr>
                         ))}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            )}
         </Container>
     );
 }

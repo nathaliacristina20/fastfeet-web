@@ -1,13 +1,28 @@
 import styled, { css } from 'styled-components';
 
+export const Container = styled.div`
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+`;
+
 export const Content = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
     width: 100%;
+
+    ${props =>
+        props.width &&
+        css`
+            ul li {
+                width: ${props.width}px;
+            }
+        `}
+
     ul {
         position: absolute;
-
         background: #ffffff;
         box-shadow: 0px 0px 2px #00000026;
         border-radius: 4px;
@@ -36,18 +51,10 @@ export const Content = styled.div`
     }
 `;
 
-export const Container = styled.div`
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    position: absolute;
-`;
-
 export const Actions = styled.div`
     display: flex;
     justify-content: center;
     z-index: 1;
-
     a,
     li {
         color: #999999;

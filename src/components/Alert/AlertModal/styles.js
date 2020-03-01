@@ -1,36 +1,18 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-    button {
-        background: none;
-        border: none;
-    }
-`;
+export const Container = styled.div``;
 
 export const ModalStyle = styled.div`
-    width: 390px;
-    strong {
-        color: #444444;
-        font-size: 14px;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-    }
-
+    width: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     div {
-        font-size: 16px;
-        color: #666666;
         margin-top: 8px;
         margin-bottom: 20px;
         text-align: justify;
         display: flex;
         flex-direction: column;
-    }
-
-    div input {
-        background: lime;
-        width: 390px;
-        height: 127px;
-        resize: none;
     }
 
     button {
@@ -50,10 +32,5 @@ export const ModalStyle = styled.div`
         svg {
             margin: 8px 8px 8px 16px;
         }
-    }
-
-    textarea {
-        height: 120px;
-        resize: none;
     }
 `;

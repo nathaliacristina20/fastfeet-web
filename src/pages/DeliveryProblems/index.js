@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import FormHeader from '~/components/Form/FormHeader';
 
-import { Container } from './styles';
+import { Container, HtmlView } from './styles';
 
 import api from '~/services/api';
 
@@ -11,11 +11,22 @@ import ActionsButtons from '~/components/ActionsButtons';
 
 export default function DeliveryProblems() {
     const [deliveryProblems, setDeliveryProblems] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function loadDeliveryProblems() {
             const { data } = await api.get('delivery/problems');
-            setDeliveryProblems(data);
+
+            const dataFormatted = data.map(deliveryProblem => ({
+                ...deliveryProblem,
+                descriptionFormatted:
+                    deliveryProblem.description.length > 100
+                        ? `${deliveryProblem.description.substr(0, 100)}...`
+                        : deliveryProblem.description,
+            }));
+
+            setDeliveryProblems(dataFormatted);
+            setLoading(false);
         }
 
         loadDeliveryProblems();
@@ -30,30 +41,38 @@ export default function DeliveryProblems() {
         }
     }
 
+    function viewDeliveryProblem(delivery_problem) {
+        return (
+            <HtmlView>
+                <strong>Visualizar problema</strong>
+                <p>{delivery_problem.description}</p>
+            </HtmlView>
+        );
+    }
+
     return (
         <Container>
             <FormHeader title="Problemas na entrega" buttons={false} />
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>Encomenda</th>
-                        <th>Problema</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {deliveryProblems &&
-                        deliveryProblems.map(deliveryProblem => (
+
+            {loading && <center>Carregando..</center>}
+            {!loading && deliveryProblems.length === 0 && (
+                <center>Nenhum registro encontrado.</center>
+            )}
+
+            {!loading && deliveryProblems.length !== 0 && (
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Encomenda</th>
+                            <th>Problema</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {deliveryProblems.map(deliveryProblem => (
                             <tr key={deliveryProblem.id}>
                                 <td>{`#${deliveryProblem.id}`}</td>
-                                <td>
-                                    {deliveryProblem.description.length > 100
-                                        ? `${deliveryProblem.description.substr(
-                                              0,
-                                              100
-                                          )}...`
-                                        : deliveryProblem.description}
-                                </td>
+                                <td>{deliveryProblem.descriptionFormatted}</td>
                                 <td>
                                     <ActionsButtons
                                         width={250}
@@ -61,13 +80,16 @@ export default function DeliveryProblems() {
                                         deleteHandle={() =>
                                             deleteHandle(deliveryProblem.id)
                                         }
-                                        showHandle={`<strong>Visualizar problema</strong><p>${deliveryProblem.description}</p>`}
+                                        showHandle={() =>
+                                            viewDeliveryProblem(deliveryProblem)
+                                        }
                                     />
                                 </td>
                             </tr>
                         ))}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            )}
         </Container>
     );
 }

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { MdRemoveRedEye } from 'react-icons/md';
 import { Container, ModalStyle } from './styles';
 
-export default function AlertModal({ showHTML }) {
+export default function AlertModal({ showHTML, closeActions }) {
     const [modalIsOpen, setIsOpen] = useState(false);
 
     const customStyles = {
@@ -39,33 +39,33 @@ export default function AlertModal({ showHTML }) {
         setIsOpen(false);
     }
 
+    function handleOpen() {
+        openModal();
+        closeActions();
+    }
+
     return (
         <Container>
             <MdRemoveRedEye size={16} color="#7D40E7" />
-            <span onClick={openModal}>Visualizar</span>
+            <span onClick={handleOpen}>Visualizar</span>
             <Modal
                 isOpen={modalIsOpen}
                 onAfterOpen={afterOpenModal}
                 onRequestClose={closeModal}
                 style={customStyles}
             >
-                <ModalStyle>
-                    <div
-                        // eslint-disable-next-line react/no-danger
-                        dangerouslySetInnerHTML={{
-                            __html: showHTML,
-                        }}
-                    />
-                </ModalStyle>
+                <ModalStyle>{showHTML()}</ModalStyle>
             </Modal>
         </Container>
     );
 }
 
 AlertModal.propTypes = {
-    showHTML: PropTypes.string,
+    showHTML: PropTypes.func,
+    closeActions: PropTypes.func,
 };
 
 AlertModal.defaultProps = {
-    showHTML: '',
+    showHTML: null,
+    closeActions: null
 };

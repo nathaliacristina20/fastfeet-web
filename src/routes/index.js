@@ -24,20 +24,18 @@ export default function Routes() {
             <Route path="/encomendas" exact isPrivate component={Deliveries} />
             <Route
                 path="/encomendas/novo"
-                exact
                 isPrivate
                 title="Cadastro de encomendas"
                 component={Delivery}
             />
             <Route
                 path="/encomendas/:id/editar"
-                exact
                 isPrivate
                 title="Edição de encomendas"
                 component={Delivery}
             />
             <Route
-                path="/encomendas/problemas"
+                path="/problemas"
                 exact
                 isPrivate
                 title="Problemas na entrega"

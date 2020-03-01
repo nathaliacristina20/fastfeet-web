@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-
 import { useDispatch } from 'react-redux';
 
 import * as Yup from 'yup';
@@ -7,11 +6,12 @@ import { Form } from '@unform/web';
 
 import { signInRequest } from '~/store/modules/auth/actions';
 
-import validateInputForm from '../../components/Util/ErrorHandler';
-
-import { Container, Content, ButtonSignIn } from './styles';
+import { FormStyle } from '~/styles/form';
+import { Container, Content, Logo } from './styles';
 
 import Input from '~/components/Form/Input';
+
+import logo from '~/assets/fastfeet.svg';
 
 export default function SignIn() {
     const formRef = useRef(null);
@@ -26,28 +26,47 @@ export default function SignIn() {
             .required(),
     });
 
-    function handleSubmit(data, { reset }) {
-        if (validateInputForm(schema, data, formRef, reset)) {
+    async function handleSubmit(data) {
+        try {
+            await schema.validate(data, {
+                abortEarly: false,
+            });
+
             dispatch(signInRequest(data.email, data.password));
+        } catch (err) {
+            if (err instanceof Yup.ValidationError) {
+                const errorMessages = {};
+                err.inner.forEach(error => {
+                    errorMessages[error.path] = error.message;
+                });
+                formRef.current.setErrors(errorMessages);
+            }
         }
     }
 
     return (
         <Container>
             <Content>
-                <Form ref={formRef} onSubmit={handleSubmit}>
-                    <Input
-                        name="email"
-                        type="email"
-                        label="email"
-                        placeholder="SEU E-MAIL"
-                        error="dsada"
-                    />
-                    <Input name="password" type="password" label="SUA SENHA" />
-                    <ButtonSignIn>
+                <Logo>
+                    <img src={logo} alt="Logo" />
+                </Logo>
+                <FormStyle>
+                    <Form ref={formRef} onSubmit={handleSubmit}>
+                        <Input
+                            name="email"
+                            type="email"
+                            label="SEU E-MAIL"
+                            formRef={formRef}
+                        />
+                        <Input
+                            name="password"
+                            type="password"
+                            label="SUA SENHA"
+                            formRef={formRef}
+                        />
                         <button type="submit">Entrar no sistema</button>
-                    </ButtonSignIn>
-                </Form>
+                    </Form>
+                </FormStyle>
             </Content>
         </Container>
     );

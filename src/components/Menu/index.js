@@ -15,7 +15,7 @@ export default function Menu() {
         { route: '/encomendas', label: 'Encomendas' },
         { route: '/entregadores', label: 'Entregadores' },
         { route: '/destinatarios', label: 'Destinatários' },
-        { route: '/encomendas/problemas', label: 'Problemas' },
+        { route: '/problemas', label: 'Problemas' },
     ];
 
     const profile = useSelector(state => state.user.profile);
@@ -34,7 +34,6 @@ export default function Menu() {
                     <nav>
                         {breadcrumbs.map(breadcrumb => (
                             <NavLink
-                                exact
                                 key={breadcrumb.label}
                                 to={breadcrumb.route}
                                 activeStyle={{

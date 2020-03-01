@@ -38,7 +38,6 @@ export default createGlobalStyle`
     }
 
     .error {
-        margin: 3px 0;
         font-size: 12px;
         color: #ff6347;
     }
@@ -47,18 +46,6 @@ export default createGlobalStyle`
         border-collapse: separate;
         border-spacing: 0 21px;
         width: 100%;
-        tr {
-            padding: 20px;
-        }
-
-        th:first-child,
-        td:first-child {
-            padding-left: 25px;
-        }
-
-        td:last-child {
-            cursor: pointer;
-        }
 
         th {
             font-size: 16px;
@@ -70,68 +57,79 @@ export default createGlobalStyle`
             opacity: 1;
         }
 
+        th:first-child,
+        td:first-child {
+            padding-left: 25px;
+        }      
+
         td {
             background: #fff;
             padding: 20px 20px 20px 0;
             font-size: 16px;
             text-align: left;
             color: #666666;
-            border-radius: 4px;
+        }
+
+        td:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        td:last-child {
+            border-radius: 0 10px 10px 0;
         }
 
         .circulo {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        opacity: 1;
-        display: flex;
-        margin: 6px;
-    }
-
-    .status {
-        width: 120px;
-        height: 25px;
-        border-radius: 12px;
-        opacity: 1;
-        font-size: 14px;
-        text-transform: uppercase;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        padding: 5px;
-    }
-
-    .entregue {
-        color: #2ca42b;
-        background: #dff0df;
-        .circulo {
-            background: #2ca42b 0% 0% no-repeat padding-box;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            opacity: 1;
+            display: flex;
+            margin: 6px;
         }
-    }
 
-    .retirada {
-        color: ${darken(0.2, '#bad2ff')};
-        background: #bad2ff;
-        .circulo {
-            background: ${darken(0.2, '#bad2ff')};
+        .status {
+            width: 120px;
+            height: 25px;
+            border-radius: 12px;
+            opacity: 1;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 5px;
         }
-    }
 
-    .pendente {
-        color: ${darken(0.4, '#f0f0df')};
-        background: #f0f0df;
-        .circulo {
-            background: ${darken(0.4, '#f0f0df')};
+        .entregue {
+            color: #2ca42b;
+            background: #dff0df;
+            .circulo {
+                background: #2ca42b 0% 0% no-repeat padding-box;
+            }
         }
-    }
 
-    .cancelada {
-        color: ${darken(0.4, '#FAB0B0')};
-        background: #fab0b0;
-        .circulo {
-            background: ${darken(0.4, '#FAB0B0')};
+        .retirada {
+            color: ${darken(0.2, '#bad2ff')};
+            background: #bad2ff;
+            .circulo {
+                background: ${darken(0.2, '#bad2ff')};
+            }
         }
-    }
 
+        .pendente {
+            color: ${darken(0.4, '#f0f0df')};
+            background: #f0f0df;
+            .circulo {
+                background: ${darken(0.4, '#f0f0df')};
+            }
+        }
+
+        .cancelada {
+            color: ${darken(0.4, '#FAB0B0')};
+            background: #fab0b0;
+            .circulo {
+                background: ${darken(0.4, '#FAB0B0')};
+            }
+        }
 }
 `;

@@ -26,7 +26,7 @@ export const FormStyle = styled.div`
             width: 100%;
             border: 1px solid #dddddd;
             border-radius: 4px;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             padding-left: 25px;
             font-size: 16px;
             letter-spacing: 0;

@@ -5,7 +5,37 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default createGlobalStyle`
     @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
-    * {
+
+    .pagination {
+        padding: 30px;
+        border-radius: 8px;
+        /* background: #7d40e7; */
+        background: #fff;
+        border: 1px solid #dddddd;
+        color: #fff;
+        .active {
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            a {
+                font-weight: bold;
+                font-size: 18px;
+            }
+        }
+
+        li {
+            display: inline;
+            padding: 10px;
+            margin-right: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            a {
+                color: #666666;
+                text-decoration: none;
+            }
+        }
+    }
+
+   * {
         margin: 0;
         padding: 0;
         outline: 0;
@@ -14,7 +44,7 @@ export default createGlobalStyle`
     *:focus{
         outline: 0;
     }
-    html, body, #root {
+    html, body {
         height: 100%;
     }
     body {
@@ -131,5 +161,7 @@ export default createGlobalStyle`
                 background: ${darken(0.4, '#FAB0B0')};
             }
         }
+
+      
 }
 `;

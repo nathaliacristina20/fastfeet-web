@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
 import { toast } from 'react-toastify';
+
+import Pagination from 'react-js-pagination';
+// import HomePagination from '~/components/HomePagination';
+
 import { Container, Circle, HtmlView } from './styles';
 import api from '~/services/api';
 import Badge from '~/components/Badge';
@@ -11,14 +15,26 @@ export default function Deliveries() {
     const [deliveries, setDeliveries] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [page, setPage] = useState(1);
+    const [totalItemsCount, setTotalItemsCount] = useState();
+
     useEffect(() => {
         async function loadDeliveries() {
-            const { data } = await api.get('deliveries');
-            setDeliveries(data);
+            const { data } = await api.get('deliveries', {
+                params: {
+                    page,
+                },
+            });
+            setDeliveries(data.rows);
+            setTotalItemsCount(data.count);
             setLoading(false);
         }
         loadDeliveries();
-    }, []);
+    }, [page]);
+
+    function handlePageChange(pageNumber) {
+        setPage(pageNumber);
+    }
 
     async function deleteHandle(id) {
         try {
@@ -161,6 +177,19 @@ export default function Deliveries() {
                     </tbody>
                 </table>
             )}
+
+            <Pagination
+                class="pagination"
+                prevPageText="anterior"
+                nextPageText="próximo"
+                firstPageText="primeiro"
+                lastPageText="último"
+                activePage={page}
+                itemsCountPerPage={5}
+                totalItemsCount={totalItemsCount}
+                pageRangeDisplayed={5}
+                onChange={handlePageChange}
+            />
         </Container>
     );
 }

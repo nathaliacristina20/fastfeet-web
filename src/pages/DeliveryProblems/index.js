@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { toast } from 'react-toastify';
+import Pagination from 'react-js-pagination';
 import FormHeader from '~/components/Form/FormHeader';
 
 import { Container, HtmlView } from './styles';
@@ -13,11 +14,18 @@ export default function DeliveryProblems() {
     const [deliveryProblems, setDeliveryProblems] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [page, setPage] = useState(1);
+    const [totalItemsCount, setTotalItemsCount] = useState();
+
     useEffect(() => {
         async function loadDeliveryProblems() {
-            const { data } = await api.get('delivery/problems');
+            const { data } = await api.get('delivery/problems', {
+                params: {
+                    page,
+                },
+            });
 
-            const dataFormatted = data.map(deliveryProblem => ({
+            const dataFormatted = data.rows.map(deliveryProblem => ({
                 ...deliveryProblem,
                 descriptionFormatted:
                     deliveryProblem.description.length > 100
@@ -26,11 +34,12 @@ export default function DeliveryProblems() {
             }));
 
             setDeliveryProblems(dataFormatted);
+            setTotalItemsCount(data.count);
             setLoading(false);
         }
 
         loadDeliveryProblems();
-    }, []);
+    }, [page]);
 
     async function deleteHandle(id) {
         try {
@@ -48,6 +57,10 @@ export default function DeliveryProblems() {
                 <p>{delivery_problem.description}</p>
             </HtmlView>
         );
+    }
+
+    function handlePageChange(pageNumber) {
+        setPage(pageNumber);
     }
 
     return (
@@ -90,6 +103,18 @@ export default function DeliveryProblems() {
                     </tbody>
                 </table>
             )}
+            <Pagination
+                class="pagination"
+                prevPageText="anterior"
+                nextPageText="proximo"
+                firstPageText="primeiro"
+                lastPageText="ultimo"
+                activePage={page}
+                itemsCountPerPage={5}
+                totalItemsCount={totalItemsCount}
+                pageRangeDisplayed={5}
+                onChange={handlePageChange}
+            />
         </Container>
     );
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import Pagination from 'react-js-pagination';
 import { Container } from './styles';
 
 import api from '~/services/api';
@@ -11,20 +12,27 @@ import ActionsButtons from '~/components/ActionsButtons';
 export default function Recipients() {
     const [recipients, setRecipients] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [totalItemsCount, setTotalItemsCount] = useState();
 
     useEffect(() => {
         async function loadRecipients() {
-            const { data } = await api.get('recipients');
-            const dataFormatted = data.map(recipient => ({
+            const { data } = await api.get('recipients', {
+                params: {
+                    page,
+                },
+            });
+            const dataFormatted = data.rows.map(recipient => ({
                 ...recipient,
                 addressFormatted: `${recipient.street}, ${recipient.number} ${recipient.complement}, ${recipient.city} - ${recipient.state}`,
             }));
             setRecipients(dataFormatted);
+            setTotalItemsCount(data.count);
             setLoading(false);
         }
 
         loadRecipients();
-    }, []);
+    }, [page]);
 
     async function deleteHandle(id) {
         try {
@@ -49,6 +57,10 @@ export default function Recipients() {
         } catch (err) {
             toast.error('Ocorreu um erro ao buscar os registros.');
         }
+    }
+
+    function handlePageChange(pageNumber) {
+        setPage(pageNumber);
     }
 
     return (
@@ -94,6 +106,19 @@ export default function Recipients() {
                     </tbody>
                 </table>
             )}
+
+            <Pagination
+                class="pagination"
+                prevPageText="anterior"
+                nextPageText="proximo"
+                firstPageText="primeiro"
+                lastPageText="ultimo"
+                activePage={page}
+                itemsCountPerPage={5}
+                totalItemsCount={totalItemsCount}
+                pageRangeDisplayed={5}
+                onChange={handlePageChange}
+            />
         </Container>
     );
 }

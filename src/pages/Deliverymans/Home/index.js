@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import { toast } from 'react-toastify';
+import Pagination from 'react-js-pagination';
 import FormHeader from '~/components/Form/FormHeader';
-
 import { Container } from './styles';
 
 import api from '~/services/api';
@@ -17,14 +17,26 @@ export default function Deliverymans() {
     const [deliverymans, setDeliverymans] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [page, setPage] = useState(1);
+    const [totalItemsCount, setTotalItemsCount] = useState();
+
     useEffect(() => {
         async function loadDeliverymans() {
-            const { data } = await api.get('deliverymans');
-            setDeliverymans(data);
+            const { data } = await api.get('deliverymans', {
+                params: {
+                    page,
+                },
+            });
+            setDeliverymans(data.rows);
+            setTotalItemsCount(data.count);
             setLoading(false);
         }
         loadDeliverymans();
-    }, []);
+    }, [page]);
+
+    function handlePageChange(pageNumber) {
+        setPage(pageNumber);
+    }
 
     async function deleteHandle(id) {
         try {
@@ -109,6 +121,19 @@ export default function Deliverymans() {
                     </tbody>
                 </table>
             )}
+
+            <Pagination
+                class="pagination"
+                prevPageText="anterior"
+                nextPageText="proximo"
+                firstPageText="primeiro"
+                lastPageText="ultimo"
+                activePage={page}
+                itemsCountPerPage={5}
+                totalItemsCount={totalItemsCount}
+                pageRangeDisplayed={5}
+                onChange={handlePageChange}
+            />
         </Container>
     );
 }

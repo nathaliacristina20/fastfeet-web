@@ -130,7 +130,7 @@ export default createGlobalStyle`
             padding: 5px;
         }
 
-        .entregue {
+        .status-3 {
             color: #2ca42b;
             background: #dff0df;
             .circulo {
@@ -138,7 +138,7 @@ export default createGlobalStyle`
             }
         }
 
-        .retirada {
+        .status-4 {
             color: ${darken(0.2, '#bad2ff')};
             background: #bad2ff;
             .circulo {
@@ -146,7 +146,7 @@ export default createGlobalStyle`
             }
         }
 
-        .pendente {
+        .status-1 {
             color: ${darken(0.4, '#f0f0df')};
             background: #f0f0df;
             .circulo {
@@ -154,14 +154,12 @@ export default createGlobalStyle`
             }
         }
 
-        .cancelada {
+        .status-2 {
             color: ${darken(0.4, '#FAB0B0')};
             background: #fab0b0;
             .circulo {
                 background: ${darken(0.4, '#FAB0B0')};
             }
-        }
-
-      
+        }    
 }
 `;

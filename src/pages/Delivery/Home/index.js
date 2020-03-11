@@ -149,14 +149,10 @@ export default function Deliveries() {
                                 <td>{delivery.recipient.state}</td>
                                 <td>
                                     <Circle>
-                                        <div
-                                            className={
-                                                delivery.status &&
-                                                `${delivery.status} status`
-                                            }
-                                        >
-                                            <div className="circulo" />
-                                            {delivery.status}
+                                        <div className={`status status-${delivery.status.id}`}>
+                                            <div className="circulo" >
+                                                {delivery.status.label}
+                                            </div>
                                         </div>
                                     </Circle>
                                 </td>

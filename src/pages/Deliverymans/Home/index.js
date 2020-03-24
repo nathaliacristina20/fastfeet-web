@@ -55,7 +55,10 @@ export default function Deliverymans() {
             const { data } = await api.get('deliverymans', {
                 params: { name: event.target.value },
             });
-            setDeliverymans(data);
+            setPage(1);
+            setDeliverymans(data.rows);
+            setTotalItemsCount(data.count);
+            setLoading(false);
         } catch (err) {
             toast.error('Ocorreu um erro ao buscar os registros.');
         }
@@ -70,70 +73,73 @@ export default function Deliverymans() {
             />
 
             {loading && <center>Carregando..</center>}
-            {!loading && deliverymans.length === 0 && (
+            {!loading && deliverymans.length <= 0 && (
                 <center>Nenhum registro encontrado.</center>
             )}
 
-            {!loading && deliverymans.length !== 0 && (
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Foto</th>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {deliverymans.map(deliveryman => (
-                            <tr key={deliveryman.id}>
-                                <td>#{deliveryman.id}</td>
-                                <td>
-                                    {deliveryman &&
-                                    deliveryman.avatar &&
-                                    deliveryman.avatar.url !== null ? (
-                                        <Avatar>
-                                            <img
-                                                src={deliveryman.avatar.url}
-                                                alt={deliveryman.name}
-                                            />
-                                        </Avatar>
-                                    ) : (
-                                        <Badge
-                                            initials={deliveryman.name_initials}
-                                        />
-                                    )}
-                                </td>
-                                <td>{deliveryman.name}</td>
-                                <td>{deliveryman.email}</td>
-                                <td>
-                                    <ActionsButtons
-                                        pathname={`/entregadores/${deliveryman.id}/editar`}
-                                        state={deliveryman}
-                                        deleteHandle={() =>
-                                            deleteHandle(deliveryman.id)
-                                        }
-                                    />
-                                </td>
+            {deliverymans.length > 0 && (
+                <>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Foto</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Ações</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {deliverymans.map(deliveryman => (
+                                <tr key={deliveryman.id}>
+                                    <td>#{deliveryman.id}</td>
+                                    <td>
+                                        {deliveryman &&
+                                        deliveryman.avatar &&
+                                        deliveryman.avatar.url !== null ? (
+                                            <Avatar>
+                                                <img
+                                                    src={deliveryman.avatar.url}
+                                                    alt={deliveryman.name}
+                                                />
+                                            </Avatar>
+                                        ) : (
+                                            <Badge
+                                                initials={
+                                                    deliveryman.name_initials
+                                                }
+                                            />
+                                        )}
+                                    </td>
+                                    <td>{deliveryman.name}</td>
+                                    <td>{deliveryman.email}</td>
+                                    <td>
+                                        <ActionsButtons
+                                            pathname={`/entregadores/${deliveryman.id}/editar`}
+                                            state={deliveryman}
+                                            deleteHandle={() =>
+                                                deleteHandle(deliveryman.id)
+                                            }
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <Pagination
+                        class="pagination"
+                        prevPageText="anterior"
+                        nextPageText="proximo"
+                        firstPageText="primeiro"
+                        lastPageText="ultimo"
+                        activePage={page}
+                        itemsCountPerPage={5}
+                        totalItemsCount={totalItemsCount}
+                        pageRangeDisplayed={5}
+                        onChange={handlePageChange}
+                    />
+                </>
             )}
-
-            <Pagination
-                class="pagination"
-                prevPageText="anterior"
-                nextPageText="proximo"
-                firstPageText="primeiro"
-                lastPageText="ultimo"
-                activePage={page}
-                itemsCountPerPage={5}
-                totalItemsCount={totalItemsCount}
-                pageRangeDisplayed={5}
-                onChange={handlePageChange}
-            />
         </Container>
     );
 }

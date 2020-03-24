@@ -1,30 +1,14 @@
-import React, { useRef, useState, useEffect } from 'react';
-import AsyncSelect from 'react-select/async';
-import { useField } from '@unform/core';
+import React, { useRef, useEffect } from 'react';
+import Select from 'react-select/async';
 
+import { useField } from '@unform/core';
 import PropTypes from 'prop-types';
 
-import { Container, Error } from './styles';
+import { Container, Error, Label } from './styles';
 
-export default function Select({
-    label,
-    name,
-    placeholder,
-    loadOptions,
-    formRef,
-    ...rest
-}) {
+export default function AsyncSelect({ name, label, ...rest }) {
     const selectRef = useRef(null);
     const { fieldName, defaultValue, registerField, error } = useField(name);
-
-    const styleDefault = {
-        control: base => ({
-            ...base,
-            height: '45px',
-        }),
-    };
-
-    const [styles, setStyles] = useState(styleDefault);
 
     useEffect(() => {
         registerField({
@@ -43,61 +27,35 @@ export default function Select({
                 }
                 return ref.select.state.value.value;
             },
+            clearValue(ref) {
+                ref.select.select.clearValue();
+            },
+            setValue(ref, value) {
+                ref.select.select.setValue(value);
+            },
         });
     }, [fieldName, registerField, rest.isMulti]);
 
-    useEffect(() => {
-        if (error) {
-            setStyles({
-                control: (base, state) => ({
-                    ...base,
-                    border: '1px solid red',
-                }),
-            });
-        }
-    }, [error]);
-
-    function clearFieldError() {
-        formRef.current.setFieldError(name, null);
-        setStyles(styleDefault);
-    }
-
     return (
         <Container>
-            <label htmlFor={selectRef}>{label}</label>
-            <AsyncSelect
+            {label && <Label htmlFor={fieldName}>{label}</Label>}
+            <Select
                 cacheOptions
-                defaultOptions
                 defaultValue={defaultValue}
                 ref={selectRef}
                 classNamePrefix="react-select"
-                noOptionsMessage={() => 'Nenhum registro localizado'}
-                loadingMessage={() => 'Carregando...'}
-                loadOptions={loadOptions}
                 {...rest}
-                placeholder={placeholder}
-                styles={styles}
-                onInputChange={clearFieldError}
             />
-            {error && (
-                <Error>
-                    <span className="error">{error}</span>
-                </Error>
-            )}
+            {error && <Error>{error}</Error>}
         </Container>
     );
 }
 
-Select.propTypes = {
-    name: PropTypes.string,
+AsyncSelect.propTypes = {
+    name: PropTypes.string.isRequired,
     label: PropTypes.string,
-    placeholder: PropTypes.string,
-    loadOptions: PropTypes.func.isRequired,
-    formRef: PropTypes.string.isRequired,
 };
 
-Select.defaultProps = {
-    name: null,
-    label: null,
-    placeholder: '',
+AsyncSelect.defaultProps = {
+    label: '',
 };

@@ -15,32 +15,39 @@ import history from '~/services/history';
 import Input from '~/components/Form/Input';
 import api from '~/services/api';
 import FormButtons from '~/components/Form/FormButtons';
-import Select from '~/components/Form/AsyncSelect';
+import AsyncSelect from '~/components/Form/AsyncSelect';
 
 export default function Delivery({ title, location }) {
     const formRef = useRef(null);
     const [delivery] = useState(location.state);
 
-    async function loadRecipients() {
+    async function loadRecipients(name) {
         try {
-            const { data } = await api.get('recipients');
-            return data.map(recipient => ({
+            const response = await api.get('recipients', {
+                params: name !== '' ? { name } : {},
+            });
+            const data = response.data.rows.map(recipient => ({
                 label: recipient.name,
                 value: recipient.id,
             }));
+
+            return data;
         } catch (err) {
             toast.error('Ocorreu um erro ao carregar os Destinatarios.');
             return [];
         }
     }
 
-    async function loadDeliverymans() {
+    async function loadDeliverymans(name) {
         try {
-            const { data } = await api.get('deliverymans');
-            return data.map(deliveryman => ({
+            const response = await api.get('deliverymans', {
+                params: name !== '' ? { name } : {},
+            });
+            const data = response.data.rows.map(deliveryman => ({
                 label: deliveryman.name,
                 value: deliveryman.id,
             }));
+            return data;
         } catch (err) {
             toast.error('Ocorreu um erro ao carregar os Entregadores.');
             return [];
@@ -101,11 +108,15 @@ export default function Delivery({ title, location }) {
                     <Content>
                         <Row>
                             <Column>
-                                <Select
+                                <AsyncSelect
                                     label="Destinatário"
                                     name="recipient_id"
                                     loadOptions={loadRecipients}
                                     formRef={formRef}
+                                    placeholder="Destinatários"
+                                    noOptionsMessage={() =>
+                                        'Nenhum destinatário encontrado'
+                                    }
                                     defaultValue={
                                         delivery && {
                                             value: delivery.recipient.id,
@@ -115,11 +126,15 @@ export default function Delivery({ title, location }) {
                                 />
                             </Column>
                             <Column>
-                                <Select
+                                <AsyncSelect
                                     label="Entregador"
                                     name="deliveryman_id"
+                                    placeholder="Entregadores"
                                     loadOptions={loadDeliverymans}
                                     formRef={formRef}
+                                    noOptionsMessage={() =>
+                                        'Nenhum entregador encontrado'
+                                    }
                                     defaultValue={
                                         delivery && {
                                             value: delivery.deliveryman.id,

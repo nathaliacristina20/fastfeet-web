@@ -49,9 +49,15 @@ export default function Deliveries() {
     async function handleDeliveries(event) {
         try {
             const { data } = await api.get('deliveries', {
-                params: { product: event.target.value },
+                params:
+                    event.target.value !== ''
+                        ? { product: event.target.value }
+                        : {},
             });
-            setDeliveries(data);
+            setDeliveries(data.rows);
+            setTotalItemsCount(data.count);
+            setPage(1);
+            setLoading(false);
         } catch (err) {
             toast.error('Ocorreu um erro ao buscar os registros.');
         }
@@ -112,84 +118,86 @@ export default function Deliveries() {
             />
 
             {loading && <center>Carregando..</center>}
-            {!loading && deliveries.length === 0 && (
+            {!loading && deliveries.length <= 0 && (
                 <center>Nenhum registro encontrado.</center>
             )}
-            {!loading && deliveries.length !== 0 && (
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Destinatário</th>
-                            <th>Entregador</th>
-                            <th>Cidade</th>
-                            <th>Estado</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {deliveries.map(delivery => (
-                            <tr key={delivery.id}>
-                                <td>#{delivery.id}</td>
-                                <td>{delivery.recipient.name}</td>
-                                <td>
-                                    <Badge
-                                        avatar={
-                                            delivery.deliveryman.avatar &&
-                                            delivery.deliveryman.avatar.url
-                                        }
-                                        initials={
-                                            delivery.deliveryman.name_initials
-                                        }
-                                        name={delivery.deliveryman.name}
-                                    />
-                                </td>
-                                <td>{delivery.recipient.city}</td>
-                                <td>{delivery.recipient.state}</td>
-                                <td>
-                                    <Circle>
-                                        <div
-                                            className={
-                                                delivery.status &&
-                                                `${delivery.status} status`
-                                            }
-                                        >
-                                            <div className="circulo" />
-                                            {delivery.status}
-                                        </div>
-                                    </Circle>
-                                </td>
-                                <td>
-                                    <ActionsButtons
-                                        pathname={`encomendas/${delivery.id}/editar`}
-                                        deleteHandle={() =>
-                                            deleteHandle(delivery.id)
-                                        }
-                                        state={delivery}
-                                        showHandle={() =>
-                                            viewDelivery(delivery)
-                                        }
-                                    />
-                                </td>
+            {deliveries.length > 0 && (
+                <>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Destinatário</th>
+                                <th>Entregador</th>
+                                <th>Cidade</th>
+                                <th>Estado</th>
+                                <th>Status</th>
+                                <th>Ações</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {deliveries.map(delivery => (
+                                <tr key={delivery.id}>
+                                    <td>#{delivery.id}</td>
+                                    <td>{delivery.recipient.name}</td>
+                                    <td>
+                                        <Badge
+                                            avatar={
+                                                delivery.deliveryman.avatar &&
+                                                delivery.deliveryman.avatar.url
+                                            }
+                                            initials={
+                                                delivery.deliveryman
+                                                    .name_initials
+                                            }
+                                            name={delivery.deliveryman.name}
+                                        />
+                                    </td>
+                                    <td>{delivery.recipient.city}</td>
+                                    <td>{delivery.recipient.state}</td>
+                                    <td>
+                                        <Circle>
+                                            <div
+                                                className={
+                                                    delivery.status &&
+                                                    `${delivery.status.label.toLowerCase()} status`
+                                                }
+                                            >
+                                                <div className="circulo" />
+                                                {delivery.status.label}
+                                            </div>
+                                        </Circle>
+                                    </td>
+                                    <td>
+                                        <ActionsButtons
+                                            pathname={`encomendas/${delivery.id}/editar`}
+                                            deleteHandle={() =>
+                                                deleteHandle(delivery.id)
+                                            }
+                                            state={delivery}
+                                            showHandle={() =>
+                                                viewDelivery(delivery)
+                                            }
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <Pagination
+                        class="pagination"
+                        prevPageText="anterior"
+                        nextPageText="próximo"
+                        firstPageText="primeiro"
+                        lastPageText="último"
+                        activePage={page}
+                        itemsCountPerPage={5}
+                        totalItemsCount={totalItemsCount}
+                        pageRangeDisplayed={5}
+                        onChange={handlePageChange}
+                    />
+                </>
             )}
-
-            <Pagination
-                class="pagination"
-                prevPageText="anterior"
-                nextPageText="próximo"
-                firstPageText="primeiro"
-                lastPageText="último"
-                activePage={page}
-                itemsCountPerPage={5}
-                totalItemsCount={totalItemsCount}
-                pageRangeDisplayed={5}
-                onChange={handlePageChange}
-            />
         </Container>
     );
 }

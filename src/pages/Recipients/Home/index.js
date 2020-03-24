@@ -49,11 +49,14 @@ export default function Recipients() {
             const { data } = await api.get('recipients', {
                 params: { name: event.target.value },
             });
-            const dataFormatted = data.map(recipient => ({
+            const dataFormatted = data.rows.map(recipient => ({
                 ...recipient,
                 addressFormatted: `${recipient.street}, ${recipient.number} ${recipient.complement}, ${recipient.city} - ${recipient.state}`,
             }));
+            setPage(1);
             setRecipients(dataFormatted);
+            setTotalItemsCount(data.count);
+            setLoading(false);
         } catch (err) {
             toast.error('Ocorreu um erro ao buscar os registros.');
         }
@@ -72,53 +75,54 @@ export default function Recipients() {
             />
 
             {loading && <center>Carregando..</center>}
-            {!loading && recipients.length === 0 && (
+            {!loading && recipients.length <= 0 && (
                 <center>Nenhum registro encontrado.</center>
             )}
 
-            {!loading && recipients.length !== 0 && (
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Endereço</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {recipients.map(recipient => (
-                            <tr key={recipient.id}>
-                                <td>{`#${recipient.id}`}</td>
-                                <td>{recipient.name}</td>
-                                <td>{recipient.addressFormatted}</td>
-                                <td>
-                                    <ActionsButtons
-                                        pathname={`/destinatarios/${recipient.id}/editar`}
-                                        state={recipient}
-                                        deleteHandle={() =>
-                                            deleteHandle(recipient.id)
-                                        }
-                                    />
-                                </td>
+            {recipients.length > 0 && (
+                <>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Endereço</th>
+                                <th>Ações</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {recipients.map(recipient => (
+                                <tr key={recipient.id}>
+                                    <td>{`#${recipient.id}`}</td>
+                                    <td>{recipient.name}</td>
+                                    <td>{recipient.addressFormatted}</td>
+                                    <td>
+                                        <ActionsButtons
+                                            pathname={`/destinatarios/${recipient.id}/editar`}
+                                            state={recipient}
+                                            deleteHandle={() =>
+                                                deleteHandle(recipient.id)
+                                            }
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <Pagination
+                        class="pagination"
+                        prevPageText="anterior"
+                        nextPageText="proximo"
+                        firstPageText="primeiro"
+                        lastPageText="ultimo"
+                        activePage={page}
+                        itemsCountPerPage={5}
+                        totalItemsCount={totalItemsCount}
+                        pageRangeDisplayed={5}
+                        onChange={handlePageChange}
+                    />
+                </>
             )}
-
-            <Pagination
-                class="pagination"
-                prevPageText="anterior"
-                nextPageText="proximo"
-                firstPageText="primeiro"
-                lastPageText="ultimo"
-                activePage={page}
-                itemsCountPerPage={5}
-                totalItemsCount={totalItemsCount}
-                pageRangeDisplayed={5}
-                onChange={handlePageChange}
-            />
         </Container>
     );
 }

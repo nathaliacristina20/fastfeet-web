@@ -121,18 +121,59 @@ export default function Deliveries() {
             {!loading && deliveries.length <= 0 && (
                 <center>Nenhum registro encontrado.</center>
             )}
-            {deliveries.length > 0 && (
-                <>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Destinatário</th>
-                                <th>Entregador</th>
-                                <th>Cidade</th>
-                                <th>Estado</th>
-                                <th>Status</th>
-                                <th>Ações</th>
+            {!loading && deliveries.length !== 0 && (
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Destinatário</th>
+                            <th>Entregador</th>
+                            <th>Cidade</th>
+                            <th>Estado</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {deliveries.map(delivery => (
+                            <tr key={delivery.id}>
+                                <td>#{delivery.id}</td>
+                                <td>{delivery.recipient.name}</td>
+                                <td>
+                                    <Badge
+                                        avatar={
+                                            delivery.deliveryman.avatar &&
+                                            delivery.deliveryman.avatar.url
+                                        }
+                                        initials={
+                                            delivery.deliveryman.name_initials
+                                        }
+                                        name={delivery.deliveryman.name}
+                                    />
+                                </td>
+                                <td>{delivery.recipient.city}</td>
+                                <td>{delivery.recipient.state}</td>
+                                <td>
+                                    <Circle>
+                                        <div className={`status status-${delivery.status.id}`}>
+                                            <div className="circulo" >
+                                                {delivery.status.label}
+                                            </div>
+                                        </div>
+                                    </Circle>
+                                </td>
+                                <td>
+                                    <ActionsButtons
+                                        pathname={`encomendas/${delivery.id}/editar`}
+                                        deleteHandle={() =>
+                                            deleteHandle(delivery.id)
+                                        }
+                                        state={delivery}
+                                        showHandle={() =>
+                                            viewDelivery(delivery)
+                                        }
+                                    />
+                                </td>
                             </tr>
                         </thead>
                         <tbody>

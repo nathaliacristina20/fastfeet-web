@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { MdRemoveRedEye } from 'react-icons/md';
-import { Container, ModalStyle } from './styles';
+import { Container, Option, ModalStyle } from './styles';
 
 export default function AlertModal({ showHTML, closeActions }) {
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -47,8 +47,9 @@ export default function AlertModal({ showHTML, closeActions }) {
     return (
         <Container>
             <MdRemoveRedEye size={16} color="#7D40E7" />
-            <span onClick={handleOpen}>Visualizar</span>
+            <Option onClick={handleOpen}>Visualizar</Option>
             <Modal
+                ariaHideApp={false}
                 isOpen={modalIsOpen}
                 onAfterOpen={afterOpenModal}
                 onRequestClose={closeModal}
@@ -67,5 +68,5 @@ AlertModal.propTypes = {
 
 AlertModal.defaultProps = {
     showHTML: null,
-    closeActions: null
+    closeActions: null,
 };

@@ -72,3 +72,5 @@ export const Preview = styled.div`
         border-radius: 50%;
     }
 `;
+
+export const Label = styled.label``;

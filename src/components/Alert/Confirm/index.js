@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { MdDeleteForever } from 'react-icons/md';
 import PropTypes from 'prop-types';
@@ -30,7 +29,7 @@ export default function ConfirmAlert({ confirm, title }) {
                 onCancel={onCancel}
                 focusCancelBtn
             >
-                Este registro nao podera ser recuperado!
+                Este registro não poderá ser recuperado!
             </SweetAlert>
         );
 
@@ -40,16 +39,10 @@ export default function ConfirmAlert({ confirm, title }) {
     }
 
     return (
-        <Container>
-            <a
-                type="button"
-                className="apagar"
-                onClick={() => deleteThisGoal()}
-            >
-                <MdDeleteForever size={16} color="#DE3B3B" />
-                {title}
-                {state.alert}
-            </a>
+        <Container className="apagar" onClick={() => deleteThisGoal()}>
+            <MdDeleteForever size={16} color="#DE3B3B" />
+            {title}
+            {state.alert}
         </Container>
     );
 }
@@ -61,4 +54,5 @@ ConfirmAlert.propTypes = {
 
 ConfirmAlert.defaultProps = {
     title: '',
+    confirm() {},
 };

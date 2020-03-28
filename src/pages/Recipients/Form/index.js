@@ -156,7 +156,7 @@ export default function Recipient({ title, location }) {
 }
 
 Recipient.propTypes = {
-    location: PropTypes.object,
+    location: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     title: PropTypes.string.isRequired,
 };
 

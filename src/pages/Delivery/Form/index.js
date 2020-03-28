@@ -26,7 +26,7 @@ export default function Delivery({ title, location }) {
             const response = await api.get('recipients', {
                 params: name !== '' ? { name } : {},
             });
-            const data = response.data.rows.map(recipient => ({
+            const data = response.data.map(recipient => ({
                 label: recipient.name,
                 value: recipient.id,
             }));
@@ -43,7 +43,7 @@ export default function Delivery({ title, location }) {
             const response = await api.get('deliverymans', {
                 params: name !== '' ? { name } : {},
             });
-            const data = response.data.rows.map(deliveryman => ({
+            const data = response.data.map(deliveryman => ({
                 label: deliveryman.name,
                 value: deliveryman.id,
             }));

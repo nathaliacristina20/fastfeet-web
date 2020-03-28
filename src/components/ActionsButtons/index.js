@@ -14,9 +14,8 @@ export default function ActionsButtons({
     pathname,
     state,
     textDelete,
-    deleteHandle,
+    handleDelete,
     showHandle,
-    width,
 }) {
     const [open, setOpen] = useState(false);
     function openToggle() {
@@ -24,7 +23,7 @@ export default function ActionsButtons({
     }
 
     function handleConfirm() {
-        deleteHandle();
+        handleDelete();
         openToggle();
     }
 
@@ -47,7 +46,7 @@ export default function ActionsButtons({
                             <li>
                                 <AlertModal
                                     closeActions={openToggle}
-                                    showHTML={showHandle}
+                                    showHTML={() => showHandle()}
                                 />
                             </li>
                         )}
@@ -79,16 +78,16 @@ export default function ActionsButtons({
 
 ActionsButtons.propTypes = {
     pathname: PropTypes.string,
-    state: PropTypes.object,
+    state: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     textDelete: PropTypes.string,
-    deleteHandle: PropTypes.func,
+    handleDelete: PropTypes.func,
     showHandle: PropTypes.func,
-    width: PropTypes.number,
 };
 
 ActionsButtons.defaultProps = {
+    pathname: '',
     state: [],
     textDelete: '',
-    width: 150,
-    pathname: '',
+    handleDelete() {},
+    showHandle() {},
 };

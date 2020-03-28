@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import ReactInputMask from 'react-input-mask';
 import { useField } from '@unform/core';
 import PropTypes from 'prop-types';
-import { Container } from './styles';
+import { Container, Label } from './styles';
 
 export default function InputMask({ name, label, formRef, ...rest }) {
     const inputRef = useRef(null);
@@ -28,7 +28,7 @@ export default function InputMask({ name, label, formRef, ...rest }) {
 
     return (
         <Container>
-            <label htmlFor={inputRef}>{label}</label>
+            <Label htmlFor={inputRef}>{label}</Label>
             <ReactInputMask
                 ref={inputRef}
                 defaultValue={defaultValue}
@@ -44,9 +44,10 @@ export default function InputMask({ name, label, formRef, ...rest }) {
 InputMask.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string,
-    formRef: PropTypes.string.isRequired,
+    formRef: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
 InputMask.defaultProps = {
     label: '',
+    formRef: [],
 };

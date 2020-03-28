@@ -15,17 +15,17 @@ export default function DeliveryProblems() {
     const [loading, setLoading] = useState(true);
 
     const [page, setPage] = useState(1);
-    const [totalItemsCount, setTotalItemsCount] = useState();
+    const [totalItemsCount, setTotalItemsCount] = useState(0);
 
     useEffect(() => {
         async function loadDeliveryProblems() {
-            const { data } = await api.get('delivery/problems', {
+            const { data, headers } = await api.get('delivery/problems', {
                 params: {
                     page,
                 },
             });
 
-            const dataFormatted = data.rows.map(deliveryProblem => ({
+            const dataFormatted = data.map(deliveryProblem => ({
                 ...deliveryProblem,
                 descriptionFormatted:
                     deliveryProblem.description.length > 100
@@ -34,14 +34,14 @@ export default function DeliveryProblems() {
             }));
 
             setDeliveryProblems(dataFormatted);
-            setTotalItemsCount(data.count);
+            setTotalItemsCount(parseInt(headers['x-total-count'], 0));
             setLoading(false);
         }
 
         loadDeliveryProblems();
     }, [page]);
 
-    async function deleteHandle(id) {
+    async function handleDelete(id) {
         try {
             await api.delete(`problem/${id}/cancel-delivery`);
             toast.success('Encomenda cancelada com sucesso.');
@@ -73,48 +73,54 @@ export default function DeliveryProblems() {
             )}
 
             {!loading && deliveryProblems.length !== 0 && (
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Encomenda</th>
-                            <th>Problema</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {deliveryProblems.map(deliveryProblem => (
-                            <tr key={deliveryProblem.id}>
-                                <td>{`#${deliveryProblem.id}`}</td>
-                                <td>{deliveryProblem.descriptionFormatted}</td>
-                                <td>
-                                    <ActionsButtons
-                                        width={250}
-                                        textDelete="Cancelar encomenda"
-                                        deleteHandle={() =>
-                                            deleteHandle(deliveryProblem.id)
-                                        }
-                                        showHandle={() =>
-                                            viewDeliveryProblem(deliveryProblem)
-                                        }
-                                    />
-                                </td>
+                <>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Encomenda</th>
+                                <th>Problema</th>
+                                <th>Ações</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {deliveryProblems.map(deliveryProblem => (
+                                <tr key={deliveryProblem.id}>
+                                    <td>{`#${deliveryProblem.delivery_id}`}</td>
+                                    <td>
+                                        {deliveryProblem.descriptionFormatted}
+                                    </td>
+                                    <td>
+                                        <ActionsButtons
+                                            width={250}
+                                            textDelete="Cancelar encomenda"
+                                            handleDelete={() =>
+                                                handleDelete(deliveryProblem.id)
+                                            }
+                                            showHandle={() =>
+                                                viewDeliveryProblem(
+                                                    deliveryProblem
+                                                )
+                                            }
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <Pagination
+                        class="pagination"
+                        prevPageText="anterior"
+                        nextPageText="proximo"
+                        firstPageText="primeiro"
+                        lastPageText="ultimo"
+                        activePage={page}
+                        itemsCountPerPage={5}
+                        totalItemsCount={totalItemsCount}
+                        pageRangeDisplayed={5}
+                        onChange={handlePageChange}
+                    />
+                </>
             )}
-            <Pagination
-                class="pagination"
-                prevPageText="anterior"
-                nextPageText="proximo"
-                firstPageText="primeiro"
-                lastPageText="ultimo"
-                activePage={page}
-                itemsCountPerPage={5}
-                totalItemsCount={totalItemsCount}
-                pageRangeDisplayed={5}
-                onChange={handlePageChange}
-            />
         </Container>
     );
 }

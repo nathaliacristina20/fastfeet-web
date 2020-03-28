@@ -5,10 +5,10 @@ import {
     Container,
     Preview,
     PreviewDefault,
-    PreviewDefaultError,
     PreviewTextInitials,
     PreviewText,
     ContentPreview,
+    Label,
 } from './styles';
 
 import { colourOptions } from '~/assets/shared/data';
@@ -17,15 +17,14 @@ export default function InputFile({
     name,
     name_initials,
     label,
-    schema,
-    initial,
+    preview_default,
     ...rest
 }) {
     const inputRef = useRef(null);
 
-    const { fieldName, registerField, defaultValue, error } = useField(name);
+    const { fieldName, registerField } = useField(name);
 
-    const [preview, setPreview] = useState(initial);
+    const [preview, setPreview] = useState(preview_default);
     const [color, setColor] = useState([]);
 
     async function handlePreview(e) {
@@ -64,7 +63,7 @@ export default function InputFile({
 
     return (
         <Container>
-            <label htmlFor={name}>
+            <Label htmlFor={name}>
                 <ContentPreview>
                     {preview && (
                         <Preview>
@@ -76,7 +75,7 @@ export default function InputFile({
                             <PreviewText>Adicionar foto</PreviewText>
                         </PreviewDefault>
                     )}
-                    {!preview && !initial && name_initials && (
+                    {!preview && !preview_default && name_initials && (
                         <PreviewDefault color={`${color}`}>
                             <PreviewTextInitials color={`${color}`}>
                                 {name_initials}
@@ -84,7 +83,7 @@ export default function InputFile({
                         </PreviewDefault>
                     )}
                 </ContentPreview>
-            </label>
+            </Label>
             <input
                 type="file"
                 accept="image/*"
@@ -101,12 +100,14 @@ export default function InputFile({
 InputFile.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string,
-    schema: PropTypes.object,
-    initial: PropTypes.string,
+    schema: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    preview_default: PropTypes.string,
+    name_initials: PropTypes.string,
 };
 
 InputFile.defaultProps = {
-    label: null,
+    label: '',
     schema: {},
-    initial: null,
+    preview_default: '',
+    name_initials: '',
 };

@@ -9,3 +9,5 @@ export const Container = styled.div`
         border: 1px solid #ff6347;
     }
 `;
+
+export const Label = styled.label``;

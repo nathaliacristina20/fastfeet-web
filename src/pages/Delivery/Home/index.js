@@ -20,13 +20,13 @@ export default function Deliveries() {
 
     useEffect(() => {
         async function loadDeliveries() {
-            const { data } = await api.get('deliveries', {
+            const { data, headers } = await api.get('deliveries', {
                 params: {
                     page,
                 },
             });
-            setDeliveries(data.rows);
-            setTotalItemsCount(data.count);
+            setDeliveries(data);
+            setTotalItemsCount(parseInt(headers['x-total-count'], 10));
             setLoading(false);
         }
         loadDeliveries();
@@ -36,10 +36,12 @@ export default function Deliveries() {
         setPage(pageNumber);
     }
 
-    async function deleteHandle(id) {
+    async function handleDelete(id) {
         try {
             await api.delete(`deliveries/${id}`);
             setDeliveries(deliveries.filter(delivery => delivery.id !== id));
+            setTotalItemsCount(totalItemsCount - 1);
+            setPage(1);
             toast.success('Registro excluido com sucesso.');
         } catch (err) {
             toast.error('Ocorreu um erro ao excluir a encomenda.');
@@ -48,14 +50,14 @@ export default function Deliveries() {
 
     async function handleDeliveries(event) {
         try {
-            const { data } = await api.get('deliveries', {
+            const { data, headers } = await api.get('deliveries', {
                 params:
                     event.target.value !== ''
                         ? { product: event.target.value }
                         : {},
             });
-            setDeliveries(data.rows);
-            setTotalItemsCount(data.count);
+            setDeliveries(data);
+            setTotalItemsCount(headers['x-total-count']);
             setPage(1);
             setLoading(false);
         } catch (err) {
@@ -80,14 +82,15 @@ export default function Deliveries() {
                         <h3>Datas</h3>
                         <span>
                             <strong>Retirada: </strong>
-                            {format(
-                                parseISO(delivery.start_date),
-                                "dd'/'MM'/'yyyy"
-                            )}
+                            {delivery.start_date !== null &&
+                                format(
+                                    parseISO(delivery.start_date),
+                                    "dd'/'MM'/'yyyy"
+                                )}
                         </span>
                         <span>
                             <strong>Entrega: </strong>
-                            {delivery.end_date &&
+                            {delivery.end_date !== null &&
                                 format(
                                     parseISO(delivery.end_date),
                                     "dd'/'MM'/'yyyy"
@@ -122,58 +125,18 @@ export default function Deliveries() {
                 <center>Nenhum registro encontrado.</center>
             )}
             {!loading && deliveries.length !== 0 && (
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Destinatário</th>
-                            <th>Entregador</th>
-                            <th>Cidade</th>
-                            <th>Estado</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {deliveries.map(delivery => (
-                            <tr key={delivery.id}>
-                                <td>#{delivery.id}</td>
-                                <td>{delivery.recipient.name}</td>
-                                <td>
-                                    <Badge
-                                        avatar={
-                                            delivery.deliveryman.avatar &&
-                                            delivery.deliveryman.avatar.url
-                                        }
-                                        initials={
-                                            delivery.deliveryman.name_initials
-                                        }
-                                        name={delivery.deliveryman.name}
-                                    />
-                                </td>
-                                <td>{delivery.recipient.city}</td>
-                                <td>{delivery.recipient.state}</td>
-                                <td>
-                                    <Circle>
-                                        <div className={`status status-${delivery.status.id}`}>
-                                            <div className="circulo" >
-                                                {delivery.status.label}
-                                            </div>
-                                        </div>
-                                    </Circle>
-                                </td>
-                                <td>
-                                    <ActionsButtons
-                                        pathname={`encomendas/${delivery.id}/editar`}
-                                        deleteHandle={() =>
-                                            deleteHandle(delivery.id)
-                                        }
-                                        state={delivery}
-                                        showHandle={() =>
-                                            viewDelivery(delivery)
-                                        }
-                                    />
-                                </td>
+                <>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Destinatário</th>
+                                <th>Entregador</th>
+                                <th>Produto</th>
+                                <th>Cidade</th>
+                                <th>Estado</th>
+                                <th>Status</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -194,15 +157,13 @@ export default function Deliveries() {
                                             name={delivery.deliveryman.name}
                                         />
                                     </td>
+                                    <td>{delivery.product}</td>
                                     <td>{delivery.recipient.city}</td>
                                     <td>{delivery.recipient.state}</td>
                                     <td>
                                         <Circle>
                                             <div
-                                                className={
-                                                    delivery.status &&
-                                                    `${delivery.status.label.toLowerCase()} status`
-                                                }
+                                                className={`status status-${delivery.status.value}`}
                                             >
                                                 <div className="circulo" />
                                                 {delivery.status.label}
@@ -212,8 +173,8 @@ export default function Deliveries() {
                                     <td>
                                         <ActionsButtons
                                             pathname={`encomendas/${delivery.id}/editar`}
-                                            deleteHandle={() =>
-                                                deleteHandle(delivery.id)
+                                            handleDelete={() =>
+                                                handleDelete(delivery.id)
                                             }
                                             state={delivery}
                                             showHandle={() =>

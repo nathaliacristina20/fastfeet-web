@@ -4,7 +4,7 @@ import { useField } from '@unform/core';
 
 import PropTypes from 'prop-types';
 
-import { Container } from './styles';
+import { Container, Label } from './styles';
 
 export default function SelectInput({
     name,
@@ -64,7 +64,7 @@ export default function SelectInput({
 
     return (
         <Container>
-            <label htmlFor={selectRef}>{label}</label>
+            <Label htmlFor={selectRef}>{label}</Label>
             <ReactSelect
                 defaultValue={defaultValue}
                 ref={selectRef}
@@ -86,11 +86,12 @@ SelectInput.propTypes = {
     name: PropTypes.string,
     label: PropTypes.string,
     placeholder: PropTypes.string,
-    formRef: PropTypes.string.isRequired,
+    formRef: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
 SelectInput.defaultProps = {
     name: null,
     label: null,
     placeholder: '',
+    formRef: [],
 };

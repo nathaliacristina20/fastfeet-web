@@ -19,7 +19,7 @@ import { Container } from './styles';
 import history from '~/services/history';
 
 export default function Deliveryman({ title, location }) {
-    const formRef = useRef(null);
+    const formRef = useRef('deliverymans');
 
     const [deliveryman] = useState(location.state);
 
@@ -118,18 +118,12 @@ export default function Deliveryman({ title, location }) {
                                             : ''
                                     }
                                     name="avatar_id"
-                                    formRef={formRef}
                                 />
                             </Column>
                         </Row>
                         <Row>
                             <Column>
-                                <Input
-                                    type="text"
-                                    name="name"
-                                    label="Nome"
-                                    formRef={formRef}
-                                />
+                                <Input type="text" name="name" label="Nome" />
                             </Column>
                         </Row>
                         <Row>
@@ -150,7 +144,7 @@ export default function Deliveryman({ title, location }) {
 }
 
 Deliveryman.propTypes = {
-    location: PropTypes.object,
+    location: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     title: PropTypes.string.isRequired,
 };
 

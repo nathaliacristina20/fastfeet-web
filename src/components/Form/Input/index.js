@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useField } from '@unform/core';
 import PropTypes from 'prop-types';
-import { Container } from './styles';
+import { Container, Label } from './styles';
 
 export default function Input({ name, label, formRef, ...rest }) {
     const inputRef = useRef(null);
@@ -22,7 +22,7 @@ export default function Input({ name, label, formRef, ...rest }) {
 
     return (
         <Container>
-            <label htmlFor={inputRef}>{label}</label>
+            <Label>{label}</Label>
             <input
                 ref={inputRef}
                 defaultValue={defaultValue}
@@ -38,9 +38,10 @@ export default function Input({ name, label, formRef, ...rest }) {
 Input.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string,
-    formRef: PropTypes.string.isRequired,
+    formRef: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
 Input.defaultProps = {
-    label: null,
+    label: '',
+    formRef: [],
 };

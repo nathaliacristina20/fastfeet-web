@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 export const Container = styled.div``;
 
+export const Option = styled.label``;
+
 export const ModalStyle = styled.div`
     width: 450px;
     display: flex;

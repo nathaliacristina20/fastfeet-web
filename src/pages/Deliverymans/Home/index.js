@@ -18,17 +18,17 @@ export default function Deliverymans() {
     const [loading, setLoading] = useState(true);
 
     const [page, setPage] = useState(1);
-    const [totalItemsCount, setTotalItemsCount] = useState();
+    const [totalItemsCount, setTotalItemsCount] = useState(0);
 
     useEffect(() => {
         async function loadDeliverymans() {
-            const { data } = await api.get('deliverymans', {
+            const { data, headers } = await api.get('deliverymans', {
                 params: {
                     page,
                 },
             });
-            setDeliverymans(data.rows);
-            setTotalItemsCount(data.count);
+            setDeliverymans(data);
+            setTotalItemsCount(parseInt(headers['x-total-count'], 10));
             setLoading(false);
         }
         loadDeliverymans();
@@ -38,12 +38,14 @@ export default function Deliverymans() {
         setPage(pageNumber);
     }
 
-    async function deleteHandle(id) {
+    async function handleDelete(id) {
         try {
             await api.delete(`deliverymans/${id}`);
             setDeliverymans(
                 deliverymans.filter(deliveryman => deliveryman.id !== id)
             );
+            setTotalItemsCount(totalItemsCount - 1);
+            setPage(1);
             toast.success('Registro excluido com sucesso.');
         } catch (err) {
             toast.error('Ocorreu um erro ao excluir a encomenda.');
@@ -52,12 +54,12 @@ export default function Deliverymans() {
 
     async function handleDeliverymans(event) {
         try {
-            const { data } = await api.get('deliverymans', {
+            const { data, headers } = await api.get('deliverymans', {
                 params: { name: event.target.value },
             });
             setPage(1);
-            setDeliverymans(data.rows);
-            setTotalItemsCount(data.count);
+            setDeliverymans(data);
+            setTotalItemsCount(parseInt(headers['x-total-count'], 10));
             setLoading(false);
         } catch (err) {
             toast.error('Ocorreu um erro ao buscar os registros.');
@@ -117,8 +119,8 @@ export default function Deliverymans() {
                                         <ActionsButtons
                                             pathname={`/entregadores/${deliveryman.id}/editar`}
                                             state={deliveryman}
-                                            deleteHandle={() =>
-                                                deleteHandle(deliveryman.id)
+                                            handleDelete={() =>
+                                                handleDelete(deliveryman.id)
                                             }
                                         />
                                     </td>

@@ -61,7 +61,7 @@ Plataforma de gerenciamento de entregas
 ### Pré-requisitos
 
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/en/) v10.20 ou maior
+- [Node.js](https://nodejs.org/en/) >= v10.20
 - [Yarn](https://yarnpkg.com/)
 - [Api REST do Fastfeet](https://github.com/nathaliacristina20/fastfeet)
 

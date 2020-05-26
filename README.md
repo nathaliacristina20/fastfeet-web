@@ -1,10 +1,5 @@
-<p align="center">
-    <img width="300" align="center" src=".github/logo.svg">  
-    <img width="300" align="center" src=".github/gostack.svg"> 
-</p>
-
 <h1 align="center">
-    Fastfeet
+    <img width="300" align="center" src=".github/logo.svg">
 </h1>
 
 <h3 align="center">
